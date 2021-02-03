@@ -1,7 +1,17 @@
-%% a for poles (or factors from textbook)
-a0 = [1 0.765 1];
-a1 = [1 1.848 1];
-a = conv(a0, a1);
+%% filter parameters
+n = 1; % order of butterworth filter
+
+% a for poles (or factors from textbook)
+switch n
+    case 1
+        a = [1 1]; % first order
+    case 2
+        a = [1 1.414 1]; % second order
+    case 3
+        a = conv([1 1], [1 1 1]); % third order
+    case 4
+        a = conv([1 0.765 1], [1 1.848 1]); % fourth order
+end
 
 %% b for zeros
 b = 1;
