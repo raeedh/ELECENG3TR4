@@ -1,5 +1,5 @@
 %% filter parameters
-n = 1; % order of butterworth filter
+n = 4; % order of butterworth filter
 
 % a for poles (or factors from textbook)
 switch n
