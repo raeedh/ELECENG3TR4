@@ -3,11 +3,11 @@ clc
 clear all
 hold off
 
-f0= 500;     %fundamental freq of input triangular wave
+f0= 10000;     %fundamental freq of input square wave, 0.1ms period
 T0 = 1/f0;  %period 
 tstep = 0.005*T0;
 no_sample = 3*T0/tstep + 1; %no. of samples  within  3*T0
-no_sample1 = T0/tstep + 1; %no. of samples  within  T0
+no_sample1 = int32(T0/tstep + 1); %no. of samples  within  T0
 %tt = -0.5*T0:tstep:0.5*T0;
 tt = -1.5*T0:tstep:1.5*T0;
 
