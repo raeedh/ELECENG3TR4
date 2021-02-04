@@ -1,6 +1,6 @@
 %% filter parameters
 n = 2; % order of butterworth filter
-fc = 8000; % set your cutoff frequency
+fc = 11500; % set your cutoff frequency
 fund_freq = 10e3; % fundamental frequency
 third_harm_freq = 30e3; % third harmonic frequency
 
@@ -56,9 +56,33 @@ set(gcf, 'WindowState', 'maximized');
 
 %% determine gains at desired frequencies
 vq = interp1(fc*w, mag, [fc fund_freq third_harm_freq]);
-message = ['fc: ', num2str(vq(1)), ' dB'];
+
+message = ['Attenuation at cutoff frequency: ', num2str(vq(1)), ' dB'];
 disp(message);
-message = ['fundamental frequency: ', num2str(vq(2)), ' dB'];
+
+message = ['Attenuation at fundamental frequency: ', num2str(vq(2)), ' dB'];
 disp(message);
-message = ['third harm freq: ', num2str(vq(3)), ' dB'];
+
+message = ['Attenuation at third harmonic: ', num2str(vq(3)), ' dB'];
+disp(message);
+
+switch (abs(vq(2)) < 2) 
+    case 1
+        temp = 'Yes';
+    case 0
+        temp = 'No';
+end
+message = ['The loss of the fundamental frequency due to filtering is less than 2 dB: ', temp];
+disp(message);
+
+message = ['Output of harmonics is at least ', num2str(-(vq(3)-vq(2))), ' dB below fundamental frequency'];
+disp(message);
+
+switch (abs(vq(3)-vq(2)) > 13.46) 
+    case 1
+        temp = 'Yes';
+    case 0
+        temp = 'No';
+end
+message = ['This meets the required attentuation from filtering (at least 13.46 dB): ', temp];
 disp(message);
