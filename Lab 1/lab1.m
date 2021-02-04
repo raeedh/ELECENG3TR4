@@ -46,3 +46,62 @@ Ha = gca;
 set(Ha,'Fontsize',16)
 title('magnitude spectrum of input')
 pause
+
+%% Fourier series representation of signal (Phase Spectrum)
+
+figure(3)
+Hp1=stem(f,angle(c_in));
+set(Hp1,'LineWidth',2)
+Ha = gca;
+set(Ha,'Fontsize',16)
+axis([-0.1e4 0.1e4 -pi pi])
+title('phase spectrum of input')
+pause
+
+%% Designing the 2nd order Butterworth filter parameters
+n = 2; % order of butterworth filter
+fc = 11500; % set your cutoff frequency
+fund_freq = 10e3; % fundamental frequency
+third_harm_freq = 30e3; % third harmonic frequency
+
+% a for poles (or factors from textbook)
+switch n
+    case 1
+        a = [1 1]; % first order
+    case 2
+        a = [1 1.414 1]; % second order
+    case 3
+        a = conv([1 1], [1 1 1]); % third order
+    case 4
+        a = conv([1 0.765 1], [1 1.848 1]); % fourth order
+end
+
+% b for zeros
+b = 1;
+
+%% calculate normalized frequency response
+range = ceil(third_harm_freq/fc) + 1;
+w = linspace(-range,range,500);
+h = freqs(b,a,w);
+mag = 20*log10(abs(h)); %% convert magnitude to dB
+%phase = angle(h);
+%phasedeg = phase*180/pi;
+
+c_out = c_in .* h; %Fourier coefficients of the filter output
+
+%% Construct the output signal from the Cout Fourier coefficients
+
+A = zeros(2*N+1,ceil(no_sample));
+for n = nvec
+    m=n+N+1;
+    A(m,:) = c_out(m) .* exp(1i*2*pi*n*f0*tt);
+end
+gp_out = sum(A);
+figure(5)
+Hp1 = plot(tt,real(gp_out),'b',tt,gp_in,'r');
+set(Hp1,'LineWidth',2)
+Ha = gca;
+set(Ha,'Fontsize',16)
+title('filter input and output-time domain')
+set(Ha,'Fontsize',16)
+legend('output','input')
