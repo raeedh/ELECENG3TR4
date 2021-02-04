@@ -80,14 +80,29 @@ end
 b = 1;
 
 %% calculate normalized frequency response
-range = ceil(third_harm_freq/fc) + 1;
-w = linspace(-range,range,500);
-h = freqs(b,a,w);
-mag = 20*log10(abs(h)); %% convert magnitude to dB
+% range = ceil(third_harm_freq/fc) + 1;
+%w = linspace(-range,range,length(f));
+%h = freqs(b,a,f);
+%mag = 20*log10(abs(h)); %% convert magnitude to dB
 %phase = angle(h);
 %phasedeg = phase*180/pi;
+Hf = 1 ./ (1 + 1.414*(1i*f/fc) + (1i*f/fc).^2); 
 
-c_out = c_in .* h; %Fourier coefficients of the filter output
+c_out = c_in .* Hf ; %Fourier coefficients of the filter output
+
+figure(4)
+stem(f,abs(c_in),'r','LineWidth',2);
+hold on
+stem(f,abs(c_out),'b','LineWidth',2);
+hold off
+axis([-8*f0 8*f0 0 max(abs(c_in))])
+Ha = gca;
+set(Ha,'Fontsize',16)
+title('magnitude spectrum of filter output and input')
+Ha = gca;
+set(Ha,'Fontsize',16)
+legend('input','output')
+pause
 
 %% Construct the output signal from the Cout Fourier coefficients
 
@@ -98,7 +113,7 @@ for n = nvec
 end
 gp_out = sum(A);
 figure(5)
-Hp1 = plot(tt,real(gp_out),'b',tt,gp_in,'r');
+Hp1 = plot(tt,real(gp_out),'b',tt,gp1,'r');
 set(Hp1,'LineWidth',2)
 Ha = gca;
 set(Ha,'Fontsize',16)
