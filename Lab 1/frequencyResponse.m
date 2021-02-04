@@ -33,9 +33,10 @@ subplot(2,1,1)
 plt1 = plot(w,mag);
 xlim([w(1) w(length(w))]);
 grid on
+title('Normalized Frequency Response (Magnitude)');
 xlabel('Frequency (rad/s)')
 ylabel('Magnitude (dB)')
-xline(1); % 3dB frequency (at cutoff frequency)
+xline(1,'k',{'Cutoff frequency'}); % 3dB frequency (at cutoff frequency)
 
 
 subplot(2,1,2)
@@ -43,6 +44,7 @@ plt2 = plot(fc*w,mag);
 xlim([fc*w(1) fc*w(length(w))]);
 plt2ax = ancestor(plt2(1), 'axes'); plt2ax.XAxis.Exponent = 0;
 grid on
+title('Frequency Response (Magnitude)');
 xlabel('Frequency (Hz)')
 ylabel('Magnitude (dB)')
 xline(fc,'b',{'Cutoff frequency'}); % 3dB frequency (at cutoff frequency)
