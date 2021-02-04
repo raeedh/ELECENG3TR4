@@ -1,6 +1,6 @@
 %% filter parameters
 n = 2; % order of butterworth filter
-fc = 7500; % set your cutoff frequency
+fc = 8000; % set your cutoff frequency
 fund_freq = 10e3; % fundamental frequency
 third_harm_freq = 30e3; % third harmonic frequency
 
@@ -20,7 +20,7 @@ end
 b = 1;
 
 %% calculate normalized frequency response
-range = (third_harm_freq/fc) + 1;
+range = ceil(third_harm_freq/fc) + 1;
 w = linspace(-range,range,500);
 h = freqs(b,a,w);
 mag = 20*log10(abs(h)); %% convert magnitude to dB
