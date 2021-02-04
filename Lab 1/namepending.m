@@ -11,11 +11,12 @@ no_sample1 = int32(T0/tstep + 1); %no. of samples  within  T0
 %tt = -0.5*T0:tstep:0.5*T0;
 tt = -1.5*T0:tstep:1.5*T0;
 
-tt1 = -0.5*T0:tstep:0.5*T0; % time vector for the period -0.5T0 to 0.5T0
-gp1 = [zeros(1,floor(0.5*length(tt1))) ones(1,ceil(0.5*length(tt1)))]; %input - triangular wave in the period -0.5T0 to 0.5T0
-gp_in = [gp1 gp1(2:no_sample1-1) gp1]; %3 cycles of the triangular wave
+% tt1 = -0.5*T0:tstep:0.5*T0; % time vector for the period -0.5T0 to 0.5T0
+% gp1 = [zeros(1,floor(0.5*length(tt1))) ones(1,ceil(0.5*length(tt1)))]; %input - triangular wave in the period -0.5T0 to 0.5T0
+gp1 = square(2 * pi * f0 * tt, 50);
+% gp_in = [gp1 gp1(2:no_sample1-1) gp1]; %3 cycles of the triangular wave
 figure(1)
-Hp1 = plot(tt,gp_in);
+Hp1 = plot(tt,gp1);
 set(Hp1,'LineWidth',2)
 Ha = gca;
 set(Ha,'Fontsize',16)
