@@ -54,7 +54,14 @@ The other design constraint that had to be verified was the attenuation of harmo
 \end{figure}
 
 \subsection*{Discussing the Impact of Changing Cutoff Frequency}
-% Discuss the impact of changing the cutoff frequency on design constraints (For  example, what happens if the cutoff frequency is too large? Can you satisfy the  design constraint that the any harmonic in the output is at least 25 dB below the fundamental sinusoid
+% Discuss the impact of changing the cutoff frequency on design constraints (For  example, what happens if the cutoff frequency is too large?
+When increasing the cutoff frequency to be greater than 11.5 kHz, we observe that the less than 2 dB attenuation at the fundamental frequency constraint is still meet, however the attenuation between the fundamental sinusoid and the third harmonic begins to decrease. Increasing the cutoff frequency too much will cause the filter to no longer provide the required attenuation between the fundamental sinusoid and other harmonics. This means that there is a maximum cutoff frequency for which the filter will still satisfy the design constraint.
+
+% Can you satisfy the  design constraint that the any harmonic in the output is at least 25 dB below the fundamental sinusoid
+When the design constraint is changed to requiring any harmonic in the output be be at least 25 dB below the fundamental sinusoid, the second order Butterworth filter is no longer sufficient to satisfy the design constraints. Any cutoff frequency that satisfies the constraint for attenuation at the fundamental sinusoid does not provide enough attenuation between the fundamental sinusoid and other harmonics in the output. To design a filter that satisfies this requirement, you will require a higher order Butterworth filter.
+
+% higher order filter stuff
+The initial design constraints can be satisfied with a second order Butterworth filter. Therefore, there is no reason to design a higher order Butterworth filter. It is unnecessary to increase the complexity of the filter as a higher order Butterworth filter would likely consume more resources in comparison to a second order Butterworth filter if it were to be implemented.
 
 % range of cutoff frequencies
 \subsection*{Determining the Range of Acceptable Cutoff Frequencies}
