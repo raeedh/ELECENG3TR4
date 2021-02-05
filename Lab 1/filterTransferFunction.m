@@ -1,4 +1,7 @@
-%% filter parameters
+clear;
+clc;
+
+%% Designing the 2nd order Butterworth filter parameters
 n = 2; % order of butterworth filter
 fc = 11500; % set your cutoff frequency
 fund_freq = 10e3; % fundamental frequency
@@ -20,18 +23,21 @@ end
 b = 1;
 
 %% calculate normalized frequency response
+cont_trans_func = tf(b, a)
+dis_trans_func = c2d(cont_trans_func, 1e-5)
+
 range = ceil(third_harm_freq/fc) + 1;
 w = linspace(-range,range,500);
-h = freqs(b,a,w);
-mag = 20*log10(abs(h)); %% convert magnitude to dB
-%phase = angle(h);
-%phasedeg = phase*180/pi;
+[mag, phase, wout] = bode(dis_trans_func, w);
+
+magdb = 20 * log10(mag(:));
+phase = phase(:);
 
 %% plot frequency response
 % normalized frequency response
-figure(1)
+figure(10)
 subplot(2,1,1)
-plt1 = plot(w,mag);
+plt1 = plot(w,magdb);
 xlim([w(1) w(length(w))]);
 grid on
 title('Normalized Frequency Response (Magnitude)');
@@ -41,7 +47,7 @@ xline(1,'k',{'Cutoff frequency'}); % 3dB frequency (at cutoff frequency)
 
 
 subplot(2,1,2)
-plt2 = plot(fc*w,mag);
+plt2 = plot(fc*w,magdb);
 xlim([fc*w(1) fc*w(length(w))]);
 plt2ax = ancestor(plt2(1), 'axes'); plt2ax.XAxis.Exponent = 0;
 grid on
@@ -61,7 +67,7 @@ set(gcf, 'WindowState', 'maximized');
 %ylabel('Phase (degrees)')
 
 %% determine gains at desired frequencies
-vq = interp1(fc*w, mag, [fc fund_freq third_harm_freq]);
+vq = interp1(fc*w, magdb, [fc fund_freq third_harm_freq]);
 
 message = ['Attenuation at cutoff frequency: ', num2str(vq(1)), ' dB'];
 disp(message);
