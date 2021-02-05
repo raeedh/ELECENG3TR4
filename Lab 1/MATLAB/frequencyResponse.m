@@ -1,6 +1,6 @@
 %% filter parameters
 n = 2; % order of butterworth filter
-fc = 12900; % set your cutoff frequency
+fc = 11500; % set your cutoff frequency
 fund_freq = 10e3; % fundamental frequency
 third_harm_freq = 30e3; % third harmonic frequency
 
@@ -53,7 +53,7 @@ xline(fund_freq,'r',{'Fundamental frequency'}); % first harmonic
 xline(third_harm_freq,'m',{'3rd harmonic'}); % third harmonic
 
 set(gcf, 'WindowState', 'maximized');
-exportgraphics(gcf, '../Report/Figures/max_frequency_response.png');
+% exportgraphics(gcf, '../Report/Figures/frequency_response.png');
 
 % phase response
 %plot(w,phasedeg)
