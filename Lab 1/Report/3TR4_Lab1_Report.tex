@@ -71,20 +71,20 @@ We can confirm these ranges are acceptable analytically through the transfer fun
 \begin{equation*}
     H(s) = \frac{1}{s^2 + 1.414s + 1}
 \end{equation*}
-\begin{equation}
+\begin{equation} \label{eq:1}
 \begin{aligned}
     20\log_{10}{\left|H\left(\frac{30 \text{kHz}}{11.5 \text{kHz}}\right)\right|} - 20\log_{10}{\left|H\left(\frac{10 \text{kHz}}{11.5 \text{kHz}}\right)\right|} &\approx -16.74933 - (-1.96258) \\
     &\approx -14.79 \text{ dB}
 \end{aligned}
 \end{equation}
-\begin{equation}
+\begin{equation} \label{eq:2}
 \begin{aligned}
     20\log_{10}{\left|H\left(\frac{30 \text{kHz}}{12.9 \text{kHz}}\right)\right|} - 20\log_{10}{\left|H\left(\frac{10 \text{kHz}}{12.9 \text{kHz}}\right)\right|} &\approx -14.80678 - (-1.33777) \\
     &\approx -13.47 \text{ dB}
 \end{aligned}
 \end{equation}
 
-We can see that both cutoff frequencies (Equation~\ref{eq:1}) provide the necessary attenuation from the filter $(> 13.46 \text{ dB})$ and also satisfies the condition of not having more than 2 dB of attenuation at the fundamental frequency.
+We can see through Equation~\ref{eq:1} and Equation~\ref{eq:2} that both cutoff frequencies provide the necessary attenuation from the filter $(> 13.46 \text{ dB})$ and also satisfies the condition of not having more than 2 dB of attenuation at the fundamental frequency.
 
 % If the design constraints cannot be met using the second order filter, consider using a higher order filter (TA said in tutorial u shud consider the complexity of a higher order filter if u used it).
 We were able to meet the design constraints with a 2nd order filter, thus if we had to build this filter in hardware, it would be cheaper, smaller and use less resources compared a higher order filter.
@@ -121,6 +121,6 @@ The output of the filter in the time domain closely resembles a pure sine wave w
 
 \clearpage
 \section*{Conclusion}
-In conclusion, we have determined that a second order Butterworth filter with a cutoff frequency between 11.5 kHz and 12.9 kHz will satisfy the design constraints detailed in the design problem. This was verified analytically through calculations using the filter's transfer function, and experimentally through MATLAB simulation.
+In conclusion, we have determined that a second order Butterworth filter with a cutoff frequency between 11.5 kHz and 12.9 kHz will satisfy the design constraints detailed in the design problem. This was verified analytically through calculations using the filter's transfer function, and experimentally through MATLAB simulation. The MATLAB script to determine the frequency response is attached as frequencyResponse.m, and the MATLAB script used to simulate the input, filter, and output is attached as lab1.m.
 
 \end{document}

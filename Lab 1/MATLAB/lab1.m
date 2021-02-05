@@ -59,7 +59,7 @@ axis([-8*f0 8*f0 -pi pi])
 xlabel('Frequency (Hz)'); ylabel('Phase');
 title('Phase Spectrum of Input')
 
-exportgraphics(gcf, '../Report/Figures/input.png');
+%exportgraphics(gcf, '../Report/Figures/input.png');
 
 %% Output plots
 figure(2);
@@ -123,4 +123,4 @@ Ha = gca;
 set(Ha,'Fontsize',16)
 legend('Input','Output')
 
-exportgraphics(gcf, '../Report/Figures/output.png');
+%exportgraphics(gcf, '../Report/Figures/output.png');
