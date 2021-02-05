@@ -1,6 +1,6 @@
 %% filter parameters
 n = 2; % order of butterworth filter
-fc = 11500; % set your cutoff frequency
+fc = 12900; % set your cutoff frequency
 fund_freq = 10e3; % fundamental frequency
 third_harm_freq = 30e3; % third harmonic frequency
 
@@ -22,7 +22,7 @@ b = 1;
 %% calculate normalized frequency response
 range = ceil(third_harm_freq/fc) + 1;
 w = linspace(-range,range,500);
-h = freqs(b,a,w);
+h = freqs(b,a,w); % a for poles, b for zeros, w for normalized freq range from -5 to 5 rad/s
 mag = 20*log10(abs(h)); %% convert magnitude to dB
 %phase = angle(h);
 %phasedeg = phase*180/pi;
@@ -39,7 +39,7 @@ xlabel('Frequency (rad/s)')
 ylabel('Magnitude (dB)')
 xline(1,'k',{'Cutoff frequency'}); % 3dB frequency (at cutoff frequency)
 
-
+% frequency response
 subplot(2,1,2)
 plt2 = plot(fc*w,mag);
 xlim([fc*w(1) fc*w(length(w))]);
@@ -53,6 +53,7 @@ xline(fund_freq,'r',{'Fundamental frequency'}); % first harmonic
 xline(third_harm_freq,'m',{'3rd harmonic'}); % third harmonic
 
 set(gcf, 'WindowState', 'maximized');
+exportgraphics(gcf, '../Report/Figures/max_frequency_response.png');
 
 % phase response
 %plot(w,phasedeg)
