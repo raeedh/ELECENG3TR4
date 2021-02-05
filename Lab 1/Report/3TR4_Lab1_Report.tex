@@ -67,9 +67,25 @@ We have determined through simulation that the minimum cutoff frequency required
 We have determined that the acceptable range of cutoff frequencies that satisfy the design constraints of the problem are between 11.5 kHz and 12.9 kHz.
 
 % Show analytically that the filter you have designed meets the design constraints. 
-If the cutoff frequency was too large, we would not have been able to satisfy the design constraint without moving to a higher-order Butterworth filter. A larger cutoff frequency would also be detrimental to the efficacy of the filter in removing more frequency components.
+We can confirm these ranges are acceptable analytically through the transfer function of the second order Butterworth filter.
+\begin{equation*}
+    H(s) = \frac{1}{s^2 + 1.414s + 1}
+\end{equation*}
+\begin{equation}
+\begin{aligned}
+    20\log_{10}{\left|H\left(\frac{30 \text{kHz}}{11.5 \text{kHz}}\right)\right|} - 20\log_{10}{\left|H\left(\frac{10 \text{kHz}}{11.5 \text{kHz}}\right)\right|} &\approx -16.74933 - (-1.96258) \\
+    &\approx -14.79 \text{ dB}
+\end{aligned}
+\end{equation}
+\begin{equation}
+\begin{aligned}
+    20\log_{10}{\left|H\left(\frac{30 \text{kHz}}{12.9 \text{kHz}}\right)\right|} - 20\log_{10}{\left|H\left(\frac{10 \text{kHz}}{12.9 \text{kHz}}\right)\right|} &\approx -14.80678 - (-1.33777) \\
+    &\approx -13.47 \text{ dB}
+\end{aligned}
+\end{equation}
 
-% Find the range of cutoff frequencies over which the design constraints can be met (TA said we could do this either analytically or in simulation).
+We can see that both cutoff frequencies provide the necessary attenuation from the filter $(> 13.46 \text{ dB})$ and also satisfies the condition of not having more than 2 dB of attenuation at the fundamental frequency.
+
 % If the design constraints cannot be met using the second order filter, consider using a higher order filter (TA said in tutorial u shud consider the complexity of a higher order filter if u used it).
 We were able to meet the design constraints with a 2nd order filter, thus if we had to build this filter in hardware, it would be cheaper, smaller and use less resources compared a higher order filter.
 
