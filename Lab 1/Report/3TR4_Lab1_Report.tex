@@ -61,15 +61,13 @@ When increasing the cutoff frequency to be greater than 11.5 kHz, we observe tha
 When the design constraint is changed to requiring any harmonic in the output be be at least 25 dB below the fundamental sinusoid, the second order Butterworth filter is no longer sufficient to satisfy the design constraints. Any cutoff frequency that satisfies the constraint for attenuation at the fundamental sinusoid does not provide enough attenuation between the fundamental sinusoid and other harmonics in the output. To design a filter that satisfies this requirement, you will require a higher order Butterworth filter.
 
 % higher order filter stuff
-The initial design constraints can be satisfied with a second order Butterworth filter. Therefore, there is no reason to design a higher order Butterworth filter. It is unnecessary to increase the complexity of the filter as a higher order Butterworth filter would likely consume more resources in comparison to a second order Butterworth filter if it were to be implemented.
+The initial design constraints can be satisfied with a second order Butterworth filter. Therefore, there is no reason to design a higher order Butterworth filter. In general, higher order Butterworth filters provide greater attenuation past the cutoff frequency, and take longer to see any attenuation before the cutoff frequency. This means that the filter could have a cutoff frequency that is much closer to the fundamental frequency, and also have a larger range of cutoff frequencies that still satisfy the design constraints. 
+
+It is unnecessary to increase the complexity of the design as a higher order Butterworth filter would likely consume more resources in comparison to a second order Butterworth filter if it were to be implemented, despite both satisfying the design constraints.
 
 % range of cutoff frequencies
 \subsection*{Determining the Range of Acceptable Cutoff Frequencies}
 We have determined through simulation that the minimum cutoff frequency required to satisfy the design constraints is around 11.5 kHz. We utilize the same approach explored earlier to determine what is the maximum cutoff frequency that the filter can use while still satisfying the design constraints, and determined that the maximum cutoff frequency is around 12.9 kHz. When the cutoff frequency is set to be greater than 12.9 kHz, the filter no longer provides the required attenuation between the fundamental sinusoid and the third harmonic. Figure~\ref{fig:max_freq_response} shows the frequency response of the filter at 12.9 kHz.
-\begin{figure}[h!]
-    \includegraphics[width=\textwidth]{max_frequency_response.png}
-    \caption{\label{fig:max_freq_response} The frequency response plots with the cutoff frequency at 12.9 kHz}
-\end{figure} \\
 
 We have determined that the acceptable range of cutoff frequencies that satisfy the design constraints of the problem are between 11.5 kHz and 12.9 kHz.
 
@@ -93,8 +91,11 @@ We can confirm these ranges are acceptable analytically through the transfer fun
 
 We can see through Equation~\ref{eq:1} and Equation~\ref{eq:2} that both cutoff frequencies provide the necessary attenuation from the filter $(> 13.46 \text{ dB})$ and also satisfies the condition of not having more than 2 dB of attenuation at the fundamental frequency.
 
-% If the design constraints cannot be met using the second order filter, consider using a higher order filter (TA said in tutorial u shud consider the complexity of a higher order filter if u used it).
-We were able to meet the design constraints with a 2nd order filter, thus if we had to build this filter in hardware, it would be cheaper, smaller and use less resources compared a higher order filter.
+\begin{figure}[h!]
+    \includegraphics[width=\textwidth]{max_frequency_response.png}
+    \caption{\label{fig:max_freq_response} The frequency response plots with the cutoff frequency at 12.9 kHz}
+\end{figure}
+
 
 \clearpage
 \section*{Simulation}
