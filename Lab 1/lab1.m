@@ -4,7 +4,7 @@ clear all
 %% Square wave generator (input)
 f0 = 10000; % fundamental freq of input square wave
 T0 = 1/f0;  % period
-tstep = 0.005*T0;
+tstep = 0.001*T0;
 tt = -3*T0:tstep:3*T0;
 fs = 1/tstep;   % sampling frequency
 
@@ -21,12 +21,12 @@ xlim([tt(1) tt(length(tt))]);
 title('Input - Time Domain')
 
 %% Frequency response of input
-inputFFT = abs(fft(input))/N;
+magFFT = abs(fft(input))/N;
 fshift = (-N/2:N/2-1)*(fs/N);
 
 % plot amplitude spectrum
 figure(2)
-Hp1 = plot(fshift, fftshift(inputFFT));
+Hp1 = plot(fshift, fftshift(magFFT));
 set(Hp1,'LineWidth',2)
 Ha = gca;
 set(Ha,'Fontsize',16)
@@ -35,6 +35,11 @@ xlabel('Frequency (Hz)');
 ylabel('Amplitude');
 title('Magnitude Spectrum of Input');
 
+% plot phase spectrum
+phaseFFT = angle(fft(input));
+figure(3)
+Hp1 = plot(fshift, fftshift(phaseFFT));
+xlim([-8*f0 8*f0]);
 
 %% Designing the 2nd order Butterworth filter parameters
 n = 2; % order of butterworth filter
@@ -64,37 +69,30 @@ b = 1;
 %mag = 20*log10(abs(h)); %% convert magnitude to dB
 %phase = angle(h);
 %phasedeg = phase*180/pi;
-%Hf = 1 ./ (1 + 1.414*(1i*f/fc) + (1i*f/fc).^2); 
+Hf = 1 ./ (1 + 1.414*(1i*fshift/fc) + (1i*fshift/fc).^2);
 
-%c_out = c_in .* Hf ; %Fourier coefficients of the filter output
+output = ifft(fftshift(fft(input)) .* Hf);
+figure(4)
+Hp1 = plot(tt, abs(output),'b',tt,input,'r');
+set(Hp1,'LineWidth',2)
+Ha = gca;
+set(Ha,'Fontsize',16)
+title('filter input and output-time domain')
+set(Ha,'Fontsize',16)
+legend('output','input')
+xlim([tt(1) tt(length(tt))])
 
-% figure(4)
-% stem(f,abs(c_in),'r','LineWidth',2);
-% hold on
-% stem(f,abs(c_out),'b','LineWidth',2);
-% hold off
-% axis([-8*f0 8*f0 0 max(abs(c_in))])
-% Ha = gca;
-% set(Ha,'Fontsize',16)
-% title('magnitude spectrum of filter output and input')
-% Ha = gca;
-% set(Ha,'Fontsize',16)
-% legend('input','output')
-% pause
+%% Frequency response of output
+magFFT_output = abs(fft(output))/N;
 
-%% Construct the output signal from the Cout Fourier coefficients
+% plot amplitude spectrum
+figure(5)
+Hp1 = plot(fshift, fftshift(magFFT_output));
+set(Hp1,'LineWidth',2)
+Ha = gca;
+set(Ha,'Fontsize',16)
+xlim([-8*f0 8*f0]);
+xlabel('Frequency (Hz)');
+ylabel('Amplitude');
+title('Magnitude Spectrum of Output');
 
-% A = zeros(2*N+1,ceil(no_sample));
-% for n = nvec
-%     m=n+N+1;
-%     A(m,:) = c_out(m) .* exp(1i*2*pi*n*f0*tt);
-% end
-% gp_out = sum(A);
-% figure(5)
-% Hp1 = plot(tt,real(gp_out),'b',tt,gp1,'r');
-% set(Hp1,'LineWidth',2)
-% Ha = gca;
-% set(Ha,'Fontsize',16)
-% title('filter input and output-time domain')
-% set(Ha,'Fontsize',16)
-% legend('output','input')
