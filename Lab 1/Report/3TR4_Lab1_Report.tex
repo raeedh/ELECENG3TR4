@@ -25,7 +25,7 @@
 The output of a function generator is a square wave with 50\% duty cycle and the period of the wave is 0.1 ms. You may assume that the amplitude of the square wave is 1 Volt. Design a second order Butterworth filter so that any harmonics in the output is at least 23 dB below the fundamental sinusoid at 10 kHz, and the loss of the fundamental sinusoid due to filtering should be less than 2 dB. The purpose of this experiment is to generate a high amplitude sinusoidal signal out of a square wave (to have a high quality sinusoid, the amplitudes of harmonics should be sufficiently low). You should choose the cutoff frequency of the filter (i.e. 3 dB bandwidth of the filter) such that the above design constraints are met.
 
 
-\section*{Determining the Frequency Response of the Filter}
+\subsection*{Determining the Frequency Response of the Filter}
 % talk about getting the frequency response of the filter (frequencyResponse.m)
 The first step we took was to implement a second order Butterworth filter in MATLAB and examine its frequency response. To simulate the filter, the transfer function of a second order Butterworth filter was used. The transfer function that was used for the second order Butterworth filter was provided in the textbook.
 \begin{equation*}
@@ -42,7 +42,7 @@ The MATLAB script was used to visualize the normalized frequency response of the
     \caption{\label{fig:example_freq_response} The frequency response plots with the cutoff frequency at 7.5 kHz}
 \end{figure}
 
-\section*{Determining the Cutoff Frequency}
+\subsection*{Determining the Cutoff Frequency}
 % determining minimum frequency to meet < 2 dB atten for fundamental attenuation 
 The MATLAB script was used to determine the appropriate cutoff frequency to meet the design constraints. The first design constraint that we investigated required the loss of the fundamental sinusoid due to filtering to be less than 2 dB. We determined that this occurred when the cutoff frequency was greater than 11430 Hz. We selected a cutoff frequency of 11500 Hz, where the attenuation at the fundamental frequency was approximately 1.96 dB, as our starting point to continue and explore the other design constraints.
 
@@ -53,11 +53,11 @@ The other design constraint that had to be verified was the attenuation of harmo
     \caption{\label{fig:freq_response} The frequency response plots with the cutoff frequency at 11.5 kHz}
 \end{figure}
 
-\section*{Discussing the Impact of Changing Cutoff Frequency}
+\subsection*{Discussing the Impact of Changing Cutoff Frequency}
 % Discuss the impact of changing the cutoff frequency on design constraints (For  example, what happens if the cutoff frequency is too large? Can you satisfy the  design constraint that the any harmonic in the output is at least 25 dB below the fundamental sinusoid
 
 % range of cutoff frequencies
-\section*{Determining the Range of Acceptable Cutoff Frequencies}
+\subsection*{Determining the Range of Acceptable Cutoff Frequencies}
 We have determined through simulation that the minimum cutoff frequency required to satisfy the design constraints is around 11.5 kHz. We utilize the same approach explored earlier to determine what is the maximum cutoff frequency that the filter can use while still satisfying the design constraints, and determined that the maximum cutoff frequency is around 12.9 kHz. When the cutoff frequency is set to be greater than 12.9 kHz, the filter no longer provides the required attenuation between the fundamental sinusoid and the third harmonic. Figure~\ref{fig:max_freq_response} shows the frequency response of the filter at 12.9 kHz.
 \begin{figure}[h!]
     \includegraphics[width=\textwidth]{max_frequency_response.png}
@@ -84,22 +84,43 @@ We can confirm these ranges are acceptable analytically through the transfer fun
 \end{aligned}
 \end{equation}
 
-We can see that both cutoff frequencies provide the necessary attenuation from the filter $(> 13.46 \text{ dB})$ and also satisfies the condition of not having more than 2 dB of attenuation at the fundamental frequency.
+We can see that both cutoff frequencies (Equation~\ref{eq:1}) provide the necessary attenuation from the filter $(> 13.46 \text{ dB})$ and also satisfies the condition of not having more than 2 dB of attenuation at the fundamental frequency.
 
 % If the design constraints cannot be met using the second order filter, consider using a higher order filter (TA said in tutorial u shud consider the complexity of a higher order filter if u used it).
 We were able to meet the design constraints with a 2nd order filter, thus if we had to build this filter in hardware, it would be cheaper, smaller and use less resources compared a higher order filter.
 
-% generating square wave
-We used the \verb|square()| function from the Signal Processing toolbox to generate the discrete time square wave function. We generated samples from -3T_0 to +3T_0 with a step-size of 1e-7, where T_0 is 0.1ms.
-% getting frequency response of square wave
-% fft
-% plotting magnitude spectrum
-% plotting phase spectrum
+\clearpage
+\section*{Simulation}
+The simulation of the filter was approached the same way as the triangular\_filtering.m MATLAB script provided with the lab. The MATLAB script used to simulate our filter is named lab1.m.
 
-% calculating output
-% ifft stuff (2nd method discussed in lab)
-% uh hope it actually works lol
+\subsection*{Simulating the Input}
+The input of the filter is a square wave with with 50\% duty cycle, a period of 0.1 ms and an amplitude of 1 V. To generate the square wave in MATLAB, we used the square function from MATLAB's Signal Processing Toolbox. A discrete time square wave (period of 0.0001 s, amplitude of 1 V) was generated which spanned an interval of $-0.3$ ms and $0.3$ ms. The MATLAB code used to generate the square wave is shown in Listing~\ref{listing:square_wave}.
+\lstinputlisting[style=Matlab-editor, caption={Generating the Square Wave}, label={listing:square_wave}, firstline=10, firstnumber=10, lastline=16]{lab1.m}
 
-% getting frequency response of output
-In order to get the frequency response of the output signal, we took the scaled absolute value DFT of the signal, shifted it to that it was centred on the frequency (x) axis, and then plotted the resultant waveform.
+The magnitude and phase spectrums of the input signal was generated in the same manner demonstrated in the triangular filtering script. The Fourier series representation of the square wave was generated using the Fourier series coefficients of a square wave, which has been discussed previously in lecture. The magnitude spectrum plot illustrated the absolute value of the Fourier series representation, while the phase spectrum plot illustrated the angles of the Fourier series representation. The MATLAB code used to generate the magnitude and phase spectrums of the input signal is shown in Listing~\ref{listing:input_spectrum}.
+\lstinputlisting[style=Matlab-editor, caption={Generating the Magnitude and Phase Spectrums of the Input}, label={listing:input_spectrum}, firstline=29, firstnumber=29, lastline=42]{lab1.m}
+
+Figure~\ref{fig:input} shows the time and frequency domain plots of the input signal. The magnitude spectrum illustrates the magnitude of the frequency response, with an impulse at every odd harmonic (for each sinusoid that makes up the Fourier series representation of the square wave). The fundamental sinusoid (at frequency 10 kHz) contributes the most to the signal, with each subsequent sinusoid contributing a decreasing amount. These harmonics occur at every other multiple of the fundamental frequency (10 kHz, 30 kHz, 50 kHz, etc.). The phase spectrum illustrates the phase of the frequency response. % dont know what else to say about the phase
+\begin{figure}[h!]
+    \includegraphics[width=\textwidth]{input.png}
+    \caption{\label{fig:input} The time and frequency domain plots of the input signal}
+\end{figure} \\
+
+\subsection*{Simulating the Filter and the Output}
+To simulate the filter and the output, we used the Fourier series representation method described in the lab document, which was also used in the provided triangular filtering file. 
+
+The Fourier series representation of the input signal was multiplied by the transfer function evaluated at the corresponding frequencies. The cutoff frequency used when evaluating the transfer function was the minimum acceptable cutoff frequency that was previously calculated, 11.5 kHz. The magnitude and phase spectrums of the output signal was generated using this new Fourier series representation in the same manner described for the input signal. The weighted sum of the the Fourier series is calculated to generate the output signal in the time domain. The MATLAB code used to simulate the filter and the filtered output is shown in Listing~\ref{listing:filter}
+\lstinputlisting[style=Matlab-editor, caption={Simulating the filter}, label={listing:filter}, firstline=69, firstnumber=69, lastline=81]{lab1.m}
+
+The time and frequency domain plots of the output, compared with the corresponding plots of the input, are shown in Figure~\ref{fig:output}. 
+\begin{figure}[h!]
+    \includegraphics[width=\textwidth]{output.png}
+    \caption{\label{fig:output} The time and frequency domain plots of the output signal}
+\end{figure} \\
+The output of the filter in the time domain closely resembles a pure sine wave with a period of 0.1 ms, which is what we were expecting at the output. All harmonics other than at the fundamental frequency have been attenuated (as can bee seen in the magnitude spectrum plot), leaving the majority of the Fourier series contribution to the sinusoid at the fundamental frequency (10 kHz). An evaluation of the attenuation in the magnitude spectrum reveals that the filter satisfied the design constraints, with 1.96 dB attenuation at the fundamental frequency and 16.75 dB attenuation at the third harmonic. These values were also nearly identical to the values determined during the design process.
+
+\clearpage
+\section*{Conclusion}
+In conclusion, we have determined that a second order Butterworth filter with a cutoff frequency between 11.5 kHz and 12.9 kHz will satisfy the design constraints detailed in the design problem. This was verified analytically through calculations using the filter's transfer function, and experimentally through MATLAB simulation.
+
 \end{document}

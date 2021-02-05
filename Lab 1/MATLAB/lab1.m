@@ -4,7 +4,7 @@ clear all
 %% Input plots
 figure(1);
 input_plots = tiledlayout(2,2);
-title(input_plots, 'Input Plots', 'FontSize', 20);
+title(input_plots, 'Input Plots - Raeed Hassan & Aaron Pinto', 'FontSize', 20);
 
 %% Square wave generator (input)
 f0 = 10000; % fundamental freq of input square wave
@@ -12,7 +12,6 @@ T0 = 1/f0;  % period
 tstep = 0.001*T0;
 no_sample = 6*T0/tstep + 1;
 tt = -3*T0:tstep:3*T0;
-fs = 1/tstep;   % sampling frequency
 
 input = square(tt*2*pi*f0,50); % input square wave
 
@@ -26,32 +25,30 @@ xlim([tt(1) tt(length(tt))]);
 xlabel('Time (s)'); ylabel('Voltage (V)');
 title('Input - Time Domain')
 
-%% Fourier series representation of signal (Amplitude Spectrum)
+%% Fourier series representation of signal
 N = 100; % number of harmonics
 nvec = -N:N;
 c_in = zeros(size(nvec));
 for n = nvec
    m = n + N + 1;
    if (mod(n,2))
-       % c_in(m) = sinc(n/2);
-       c_in(m) = (2/(n*pi))*sin((n*pi)/2);
+       c_in(m) = sinc(n/2);
    else
        c_in(m) = 0.0;
    end
 end
 f = nvec*f0;
+mag = abs(c_in); 
+phase = angle(c_in);
+
 nexttile;
-Hp1=stem(f,abs(c_in));
-axis([-8*f0 8*f0 0 max(abs(c_in))])
+Hp1=stem(f,mag);
+axis([-8*f0 8*f0 0 max(mag)])
 set(Hp1,'LineWidth',2)
 Ha = gca;
 set(Ha,'Fontsize',16)
 xlabel('Frequency (Hz)'); ylabel('Amplitude');
 title('Magnitude Spectrum of Input')
-
-%% Fourier series representation of signal (Phase Spectrum)
-phase = angle(c_in);
-phase(1:floor(length(phase)/2)) = -phase(1:floor(length(phase)/2));
 
 nexttile;
 Hp1=stem(f,phase);
@@ -62,10 +59,12 @@ axis([-8*f0 8*f0 -pi pi])
 xlabel('Frequency (Hz)'); ylabel('Phase');
 title('Phase Spectrum of Input')
 
-%% 
+exportgraphics(gcf, '../Report/Figures/input.png');
+
+%% Output plots
 figure(2);
 output_plots = tiledlayout(2,2);
-title(output_plots, 'Output Plots', 'FontSize', 20);
+title(output_plots, 'Output Plots - Raeed Hassan & Aaron Pinto', 'FontSize', 20);
 
 %% Designing the 2nd order Butterworth filter parameters
 fc = 11500; % set your cutoff frequency
@@ -91,8 +90,7 @@ title('Filter Input and Output - Time Domain')
 set(Ha,'Fontsize',16)
 legend('Input','Output')
 
-%% Frequency response of output
-
+%% Output frequency response
 % Plot input and output magnitude spectrum
 nexttile;
 stem(f,abs(c_in),'r','LineWidth',2);
@@ -108,9 +106,8 @@ Ha = gca;
 set(Ha,'Fontsize',16)
 legend('Input','Output')
 
-%% Fourier series representation of signal (Phase Spectrum)
+% Fourier series representation of signal (Phase Spectrum)
 phase_output = angle(c_out);
-phase_output(1:floor(length(phase_output)/2)) = phase_output(1:floor(length(phase_output)/2));
 
 nexttile;
 stem(f,phase,'r','LineWidth',2);
@@ -126,16 +123,4 @@ Ha = gca;
 set(Ha,'Fontsize',16)
 legend('Input','Output')
 
-% %% Frequency response of output
-% magFFT = abs(fft(output))/no_sample;
-% fshift = (-no_sample/2:no_sample/2-1)*(fs/no_sample);
-% 
-% % plot amplitude spectrum
-% figure(6)
-% Hp1 = plot(fshift, fftshift(magFFT));
-% set(Hp1,'LineWidth',2)
-% Ha = gca;
-% set(Ha,'Fontsize',16)
-% xlim([-8*f0 8*f0]);
-% xlabel('Frequency (Hz)'); ylabel('Amplitude');
-% title('Magnitude Spectrum of Output');
+exportgraphics(gcf, '../Report/Figures/output.png');
