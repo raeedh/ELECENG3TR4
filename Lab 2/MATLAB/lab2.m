@@ -108,74 +108,18 @@ exportgraphics(message_signal,'../Report/Figures/q2.png');
 %% Demodulation
 
 % Envelope detector function can be found at bottom of script
+% Function for plotting output of envelope detector and ouput of DC removal
+% can be found at bottom of script
 
 % Plotting output of envelope detector and output of DC removal for time constant RC = 1/fc
 RC = 1/fc;
 yt = envelope_detector(st, RC, tt, N);
-plot_2i = figure(3);
-tlayout = tiledlayout(1,2);
-title(tlayout,'Output signals for R_LC = 1/f_c','FontWeight','bold','Fontsize',24);
-
-% output of envelope detector
-nexttile;
-envelope_det = plot(tt, yt, 'LineWidth', 2);
-envelope_det_ax = gca;
-set(envelope_det_ax,'FontSize',16);
-xlabel('Time (s)','FontWeight','bold','Fontsize',16);
-ylabel('y(t) (V)','FontWeight','bold','Fontsize',16);
-title('After the envelope detector');
-axis([-2e-3 2e-3 0 max(yt)]);
-
-% dc removal and division by ka
-yt1 = (yt - 1) / ka;
-
-nexttile;
-output_signal = plot(tt,yt1,'r',tt,mt,'k', 'LineWidth', 2);
-legend('after DC removal','message signal')
-output_signal_ax = gca;
-set(output_signal_ax,'FontSize',16);
-xlabel('Time (s)','FontWeight','bold','Fontsize',16);
-ylabel('y1(t) (V)','FontWeight','bold','Fontsize',16);
-title('After the DC removal');
-axis([-2e-3 2e-3 min(mt) max(mt)]);
-
-plot_2i.WindowState = 'maximized';
-exportgraphics(plot_2i,'../Report/Figures/q2i.png');
+output_fig(yt, mt, ka, tt, 3, "1/f_c", "q2i");
 
 % Plotting output of envelope detector and output of DC removal for time constant RC = 10*Tm
 RC = 10*Tm;
 yt = envelope_detector(st, RC, tt, N);
-plot_2ii = figure(4);
-tlayout = tiledlayout(1,2);
-title(tlayout,'Output signals for R_LC = 10T_m','FontWeight','bold','Fontsize',24);
-
-% output of envelope detector
-nexttile;
-envelope_det = plot(tt, yt);
-set(envelope_det,'LineWidth',2);
-envelope_det_ax = gca;
-set(envelope_det_ax,'FontSize',16);
-xlabel('Time (s)','FontWeight','bold','Fontsize',16);
-ylabel('y(t) (V)','FontWeight','bold','Fontsize',16);
-title('After the envelope detector');
-axis([-2e-3 2e-3 0 max(yt)]);
-
-% dc removal and division by ka
-yt1 = (yt - 1) / ka;
-
-nexttile;
-output_signal = plot(tt,yt1,'r',tt,mt,'k');
-set(output_signal,'LineWidth',2);
-legend('after DC removal','message signal')
-output_signal_ax = gca;
-set(output_signal_ax,'FontSize',16);
-xlabel('Time (s)','FontWeight','bold','Fontsize',16);
-ylabel('y1(t) (V)','FontWeight','bold','Fontsize',16);
-title('After the DC removal');
-axis([-2e-3 2e-3 min(mt) max(mt)]);
-
-plot_2ii.WindowState = 'maximized';
-exportgraphics(plot_2ii,'../Report/Figures/q2ii.png');
+output_fig(yt, mt, ka, tt, 4, "10T_m", "q2ii");
 
 % figure(1)
 % Hp1 = plot(tt,ct);
@@ -230,4 +174,38 @@ function yt = envelope_detector(signal, time_const, time_vector, N)
         n=n+1;
     end
     yt(1)=yt(2);
+end
+
+function output_fig(signal, original, ka, time_vector, fig_num, RC_name, file_name)
+    fig = figure(fig_num);
+    tlayout = tiledlayout(1,2);
+    title_name = "Output signals for R_LC = " + RC_name;
+    title(tlayout, title_name,'FontWeight','bold','Fontsize',24);
+
+    % output of envelope detector
+    nexttile;
+    envelope_det = plot(time_vector, signal,'LineWidth',2);
+    envelope_det_ax = gca;
+    set(envelope_det_ax,'FontSize',16);
+    xlabel('Time (s)','FontWeight','bold','Fontsize',16);
+    ylabel('y(t) (V)','FontWeight','bold','Fontsize',16);
+    title('After the envelope detector');
+    axis([-2e-3 2e-3 0 max(signal)]);
+
+    % dc removal and division by ka
+    yt1 = (signal - 1) / ka;
+
+    nexttile;
+    output_signal = plot(time_vector,yt1,'r',time_vector,original,'k','LineWidth',2);
+    legend('after DC removal','message signal')
+    output_signal_ax = gca;
+    set(output_signal_ax,'FontSize',16);
+    xlabel('Time (s)','FontWeight','bold','Fontsize',16);
+    ylabel('y1(t) (V)','FontWeight','bold','Fontsize',16);
+    title('After the DC removal');
+    axis([-2e-3 2e-3 min(original) max(original)]);
+
+    fig.WindowState = 'maximized';
+    export_dest = "../Report/Figures/" + file_name + ".png";
+    exportgraphics(fig, export_dest);
 end
