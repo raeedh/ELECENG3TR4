@@ -30,8 +30,7 @@ tlayout = tiledlayout(2,1);
 
 % time domain
 nexttile;
-time_dom = plot(tt, mt);
-set(time_dom,'LineWidth',2);
+time_dom = plot(tt, mt, 'LineWidth', 2);
 tim_dom_ax = gca;
 set(tim_dom_ax,'FontSize',16);
 xlabel('Time (s)','FontWeight','bold','Fontsize',16);
@@ -45,8 +44,7 @@ Mf = fftshift(Mf1);
 abs_Mf = abs(Mf);
 
 nexttile;
-freq_dom = plot(freq, abs_Mf);
-set(freq_dom,'LineWidth',2);
+freq_dom = plot(freq, abs_Mf, 'LineWidth', 2);
 freq_dom_ax = gca;
 set(freq_dom_ax,'FontSize',16);
 xlabel('Frequency (Hz)','FontWeight','bold','Fontsize',16);
@@ -77,8 +75,13 @@ tlayout = tiledlayout(2,1);
 
 % time domain
 nexttile;
-time_dom = plot(tt, st);
-set(time_dom,'LineWidth',2);
+time_dom = plot(tt, st, 'b', 'LineWidth', 2);
+% plotting envelope
+hold on
+plot(tt, 0.25*mt+1,'Color','r','LineStyle', '--','LineWidth',2);
+plot(tt, -0.25*mt-1,'Color','r','LineStyle', '--','LineWidth',2);
+hold off
+legend('Modulated Signal', 'Envelope');
 tim_dom_ax = gca;
 set(tim_dom_ax,'FontSize',16);
 xlabel('Time (s)','FontWeight','bold','Fontsize',16);
@@ -91,8 +94,7 @@ Sf1 = fft(fftshift(st));
 Sf = fftshift(Sf1);
 
 nexttile;
-freq_dom = plot(freq, abs(Sf));
-set(freq_dom,'LineWidth',2);
+freq_dom = plot(freq, abs(Sf), 'LineWidth', 2);
 freq_dom_ax = gca;
 set(freq_dom_ax,'FontSize',16);
 xlabel('Frequency (Hz)','FontWeight','bold','Fontsize',16);
@@ -116,8 +118,7 @@ title(tlayout,'Output signals for R_LC = 1/f_c','FontWeight','bold','Fontsize',2
 
 % output of envelope detector
 nexttile;
-envelope_det = plot(tt, yt);
-set(envelope_det,'LineWidth',2);
+envelope_det = plot(tt, yt, 'LineWidth', 2);
 envelope_det_ax = gca;
 set(envelope_det_ax,'FontSize',16);
 xlabel('Time (s)','FontWeight','bold','Fontsize',16);
@@ -129,8 +130,7 @@ axis([-2e-3 2e-3 0 max(yt)]);
 yt1 = (yt - 1) / ka;
 
 nexttile;
-output_signal = plot(tt,yt1,'r',tt,mt,'k');
-set(output_signal,'LineWidth',2);
+output_signal = plot(tt,yt1,'r',tt,mt,'k', 'LineWidth', 2);
 legend('after DC removal','message signal')
 output_signal_ax = gca;
 set(output_signal_ax,'FontSize',16);
@@ -207,12 +207,12 @@ exportgraphics(plot_2ii,'../Report/Figures/q2ii.png');
 % % title('After the low pass filter');
 % % axis([-2e-3 2e-3 min(mt1) max(mt1)])
 
-function yt = envelope_detector(signal, time_const, tt, N)
+function yt = envelope_detector(signal, time_const, time_vector, N)
     tole = 0.1;
     yt = zeros(1,N);
     yt(1) = signal(1);
     n=1;
-    for t=tt
+    for t=time_vector
         if(n > 1)
          if(signal(n) > yt(n-1))
              yt(n) = signal(n);
