@@ -4,6 +4,7 @@ format long e
 
 %% Generating time vector, frequency vector, carrier signal, message signal, and modulated signal
 N = 2^16; %No. of FFT samples
+global sampling_rate % global variable so we can use in functions
 sampling_rate = 40e4; %unit Hz
 tstep = 1/sampling_rate;
 tmax = N*tstep/2;
@@ -20,6 +21,7 @@ Ac = 1;
 ct=Ac*cos(2*pi*fc*tt);
 
 %message signal
+global fm; % global variable so you can use in functions
 fm = 1e3;
 Tm = 0.0005;
 mt = -2*sinc(tt/Tm);
@@ -114,12 +116,16 @@ exportgraphics(message_signal,'../Report/Figures/q2.png');
 % Plotting output of envelope detector and output of DC removal for time constant RC = 1/fc
 RC = 1/fc;
 yt = envelope_detector(st, RC, tt, N);
-output_fig(yt, mt, ka, tt, 3, "1/f_c", "q2i");
+output_fig(yt, mt, ka, tt, 3, "1/f_c", "q2i", 0);
 
 % Plotting output of envelope detector and output of DC removal for time constant RC = 10*Tm
 RC = 10*Tm;
 yt = envelope_detector(st, RC, tt, N);
-output_fig(yt, mt, ka, tt, 4, "10T_m", "q2ii");
+output_fig(yt, mt, ka, tt, 4, "10T_m", "q2ii", 0);
+
+RC = 1.1*Tm;
+yt = envelope_detector(st, RC, tt, N);
+output_fig(yt, mt, ka, tt, 5, "1.1T_m", "q2iii", 1);
 
 % figure(1)
 % Hp1 = plot(tt,ct);
@@ -176,9 +182,51 @@ function yt = envelope_detector(signal, time_const, time_vector, N)
     yt(1)=yt(2);
 end
 
-function output_fig(signal, original, ka, time_vector, fig_num, RC_name, file_name)
+% function output_fig(signal, original, ka, time_vector, fig_num, RC_name, file_name)
+%     fig = figure(fig_num);
+%     tlayout = tiledlayout(1,2);
+%     title_name = "Output signals for R_LC = " + RC_name;
+%     title(tlayout, title_name,'FontWeight','bold','Fontsize',24);
+% 
+%     % output of envelope detector
+%     nexttile;
+%     envelope_det = plot(time_vector, signal,'LineWidth',2);
+%     envelope_det_ax = gca;
+%     set(envelope_det_ax,'FontSize',16);
+%     xlabel('Time (s)','FontWeight','bold','Fontsize',16);
+%     ylabel('y(t) (V)','FontWeight','bold','Fontsize',16);
+%     title('After the envelope detector');
+%     axis([-2e-3 2e-3 0 max(signal)]);
+% 
+%     % dc removal and division by ka
+%     yt1 = (signal - 1) / ka;
+% 
+%     nexttile;
+%     output_signal = plot(time_vector,yt1,'r',time_vector,original,'k','LineWidth',2);
+%     legend('after DC removal','message signal');
+%     output_signal_ax = gca;
+%     set(output_signal_ax,'FontSize',16);
+%     xlabel('Time (s)','FontWeight','bold','Fontsize',16);
+%     ylabel('y1(t) (V)','FontWeight','bold','Fontsize',16);
+%     title('After the DC removal');
+%     axis([-2e-3 2e-3 min(original) max(original)]);
+% 
+%     fig.WindowState = 'maximized';
+%     export_dest = "../Report/Figures/" + file_name + ".png";
+%     exportgraphics(fig, export_dest);
+% end
+
+function output_fig(signal, original, ka, time_vector, fig_num, RC_name, file_name, lpf) % lpf = 0 for no lpf, 1 for lpf
+    global sampling_rate;
+	global fm;
+
     fig = figure(fig_num);
-    tlayout = tiledlayout(1,2);
+    switch lpf
+        case 0
+            tlayout = tiledlayout(1,2);
+        case 1
+            tlayout = tiledlayout(1,3);
+    end
     title_name = "Output signals for R_LC = " + RC_name;
     title(tlayout, title_name,'FontWeight','bold','Fontsize',24);
 
@@ -197,13 +245,25 @@ function output_fig(signal, original, ka, time_vector, fig_num, RC_name, file_na
 
     nexttile;
     output_signal = plot(time_vector,yt1,'r',time_vector,original,'k','LineWidth',2);
-    legend('after DC removal','message signal')
+    legend('after DC removal','message signal');
     output_signal_ax = gca;
     set(output_signal_ax,'FontSize',16);
     xlabel('Time (s)','FontWeight','bold','Fontsize',16);
     ylabel('y1(t) (V)','FontWeight','bold','Fontsize',16);
     title('After the DC removal');
     axis([-2e-3 2e-3 min(original) max(original)]);
+    
+    if (lpf == 1)
+        nexttile;
+        filtered_signal = plot(time_vector,lowpass(yt1, 1.1*fm, sampling_rate),'r',time_vector,original,'k','LineWidth',2);
+        legend('after LPF','message signal');
+        filtered_signal_ax = gca;
+        set(filtered_signal_ax,'FontSize',16);
+        xlabel('Time (s)','FontWeight','bold','Fontsize',16);
+        ylabel('yf(t) (V)','FontWeight','bold','Fontsize',16);
+        title('After the passing through LPF');
+        axis([-2e-3 2e-3 min(original) max(original)]);
+    end
 
     fig.WindowState = 'maximized';
     export_dest = "../Report/Figures/" + file_name + ".png";
