@@ -123,6 +123,7 @@ RC = 10*Tm;
 yt = envelope_detector(st, RC, tt, N);
 output_fig(yt, mt, ka, tt, 4, "10T_m", "q2ii", 0);
 
+% Plotting output for 2iii after exploration of different RC values, the output is passed through a LPF
 RC = 1.1*Tm;
 yt = envelope_detector(st, RC, tt, N);
 output_fig(yt, mt, ka, tt, 5, "1.1T_m", "q2iii", 1);
@@ -138,24 +139,6 @@ output_fig(yt, mt, ka, tt, 5, "1.1T_m", "q2iii", 1);
 % set(Hx,'FontWeight','bold','Fontsize',16)
 % title('Carrier : Time domain');
 % axis([-1e-3 1e-3 -1.1 1.1])
-
-% %pause
-% %Low pass filter to remove the ripple
-% %choose the cutoff frequency of the filter to be slightly higher than
-% %the highest freq of the message signal
-% % f0 = 1.1*fm;
-% % mt1 = rect_filt(yt1,freq,f0);
-% % figure(8)
-% % Hp1 = plot(tt,mt1);
-% % set(Hp1,'LineWidth',2)
-% % Ha = gca;
-% % set(Ha,'Fontsize',16)
-% % Hx=xlabel('Time (sec) ');
-% % set(Hx,'FontWeight','bold','Fontsize',16)
-% % Hx=ylabel('m1(t)  (Volt)');
-% % set(Hx,'FontWeight','bold','Fontsize',16)
-% % title('After the low pass filter');
-% % axis([-2e-3 2e-3 min(mt1) max(mt1)])
 
 function yt = envelope_detector(signal, time_const, time_vector, N)
     tole = 0.1;
@@ -181,40 +164,6 @@ function yt = envelope_detector(signal, time_const, time_vector, N)
     end
     yt(1)=yt(2);
 end
-
-% function output_fig(signal, original, ka, time_vector, fig_num, RC_name, file_name)
-%     fig = figure(fig_num);
-%     tlayout = tiledlayout(1,2);
-%     title_name = "Output signals for R_LC = " + RC_name;
-%     title(tlayout, title_name,'FontWeight','bold','Fontsize',24);
-% 
-%     % output of envelope detector
-%     nexttile;
-%     envelope_det = plot(time_vector, signal,'LineWidth',2);
-%     envelope_det_ax = gca;
-%     set(envelope_det_ax,'FontSize',16);
-%     xlabel('Time (s)','FontWeight','bold','Fontsize',16);
-%     ylabel('y(t) (V)','FontWeight','bold','Fontsize',16);
-%     title('After the envelope detector');
-%     axis([-2e-3 2e-3 0 max(signal)]);
-% 
-%     % dc removal and division by ka
-%     yt1 = (signal - 1) / ka;
-% 
-%     nexttile;
-%     output_signal = plot(time_vector,yt1,'r',time_vector,original,'k','LineWidth',2);
-%     legend('after DC removal','message signal');
-%     output_signal_ax = gca;
-%     set(output_signal_ax,'FontSize',16);
-%     xlabel('Time (s)','FontWeight','bold','Fontsize',16);
-%     ylabel('y1(t) (V)','FontWeight','bold','Fontsize',16);
-%     title('After the DC removal');
-%     axis([-2e-3 2e-3 min(original) max(original)]);
-% 
-%     fig.WindowState = 'maximized';
-%     export_dest = "../Report/Figures/" + file_name + ".png";
-%     exportgraphics(fig, export_dest);
-% end
 
 function output_fig(signal, original, ka, time_vector, fig_num, RC_name, file_name, lpf) % lpf = 0 for no lpf, 1 for lpf
     global sampling_rate;
@@ -260,8 +209,8 @@ function output_fig(signal, original, ka, time_vector, fig_num, RC_name, file_na
         filtered_signal_ax = gca;
         set(filtered_signal_ax,'FontSize',16);
         xlabel('Time (s)','FontWeight','bold','Fontsize',16);
-        ylabel('yf(t) (V)','FontWeight','bold','Fontsize',16);
-        title('After the passing through LPF');
+        ylabel('m1(t) (V)','FontWeight','bold','Fontsize',16);
+        title('After the LPF');
         axis([-2e-3 2e-3 min(original) max(original)]);
     end
 
