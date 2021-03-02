@@ -71,43 +71,11 @@ ka=0.5/maxmt;
 %AM signal
 st = (1+ka*mt).*ct;
 
-% Plotting the modulated signal
-modulated_signal = figure(2);
-tlayout = tiledlayout(2,1);
+% Function for plotting modulated signal in time and frequency domain can
+% be found at the bottom of the script
+modulated_fig(st, mt, ka, tt, freq, 2, 0.5, "q2");
 
-% time domain
-nexttile;
-time_dom = plot(tt, st, 'b', 'LineWidth', 2);
-% plotting envelope
-hold on
-plot(tt, 0.25*mt+1,'Color','r','LineStyle', '--','LineWidth',2);
-plot(tt, -0.25*mt-1,'Color','r','LineStyle', '--','LineWidth',2);
-hold off
-legend('Modulated Signal', 'Envelope');
-tim_dom_ax = gca;
-set(tim_dom_ax,'FontSize',16);
-xlabel('Time (s)','FontWeight','bold','Fontsize',16);
-ylabel('Modulated Signal s(t) (V)','FontWeight','bold','Fontsize',16);
-title('Modulated Signal in Time Domain');
-axis([-2e-3 2e-3 min(st) max(st)]);
-
-% frequency domain
-Sf1 = fft(fftshift(st));
-Sf = fftshift(Sf1);
-
-nexttile;
-freq_dom = plot(freq, abs(Sf), 'LineWidth', 2);
-freq_dom_ax = gca;
-set(freq_dom_ax,'FontSize',16);
-xlabel('Frequency (Hz)','FontWeight','bold','Fontsize',16);
-ylabel('|M(f)|','FontWeight','bold','Fontsize',16);
-title('Magnitude Spectrum of the Modulated Signal');
-axis([-25e3 25e3 0 max(abs(Sf))]);
-
-modulated_signal.WindowState = 'maximized';
-exportgraphics(message_signal,'../Report/Figures/q2.png');
-
-%% Demodulation
+%% Demodulation (Q2i, Q2ii, Q2iii)
 
 % Envelope detector function can be found at bottom of script
 % Function for plotting output of envelope detector and ouput of DC removal
@@ -116,17 +84,31 @@ exportgraphics(message_signal,'../Report/Figures/q2.png');
 % Plotting output of envelope detector and output of DC removal for time constant RC = 1/fc
 RC = 1/fc;
 yt = envelope_detector(st, RC, tt, N);
-output_fig(yt, mt, ka, tt, 3, "1/f_c", "q2i", 0);
+output_fig(yt, mt, ka, tt, 3, 0.5, "1/f_c", "q2i", 0);
 
 % Plotting output of envelope detector and output of DC removal for time constant RC = 10*Tm
 RC = 10*Tm;
 yt = envelope_detector(st, RC, tt, N);
-output_fig(yt, mt, ka, tt, 4, "10T_m", "q2ii", 0);
+output_fig(yt, mt, ka, tt, 4, 0.5, "10T_m", "q2ii", 0);
 
 % Plotting output for 2iii after exploration of different RC values, the output is passed through a LPF
 RC = 1.1*Tm;
 yt = envelope_detector(st, RC, tt, N);
-output_fig(yt, mt, ka, tt, 5, "1.1T_m", "q2iii", 1);
+output_fig(yt, mt, ka, tt, 5, 0.5, "1.1T_m", "q2iii", 1);
+
+%% Increase modulation to above 100% (Q3)
+%For 200% modulation
+ka=2/maxmt;
+
+%AM signal
+st = (1+ka*mt).*ct;
+
+modulated_fig(st, mt, ka, tt, freq, 6, 2, "q3_mod");
+
+RC = 0.5*(Tm + (1/fc));
+yt = envelope_detector(st, RC, tt, N);
+output_fig(yt, mt, ka, tt, 7, 2, "0.5(T_m + 1/f_c)", "q3_demod", 1);
+
 
 % figure(1)
 % Hp1 = plot(tt,ct);
@@ -139,6 +121,47 @@ output_fig(yt, mt, ka, tt, 5, "1.1T_m", "q2iii", 1);
 % set(Hx,'FontWeight','bold','Fontsize',16)
 % title('Carrier : Time domain');
 % axis([-1e-3 1e-3 -1.1 1.1])
+
+function modulated_fig(signal, original, ka, time_vector, freq_vector, fig_num, percent_modulation, file_name)
+    % Plotting the modulated signal
+    fig = figure(fig_num);
+    tlayout = tiledlayout(2,1);
+
+    % time domain
+    nexttile;
+    time_dom = plot(time_vector, signal, 'b', 'LineWidth', 2);
+    % plotting envelope
+    hold on
+    plot(time_vector, ka*original+1,'Color','r','LineStyle', '--','LineWidth',2);
+    plot(time_vector, -ka*original-1,'Color','r','LineStyle', '--','LineWidth',2);
+    hold off
+    legend('Modulated Signal', 'Envelope');
+    tim_dom_ax = gca;
+    set(tim_dom_ax,'FontSize',16);
+    xlabel('Time (s)','FontWeight','bold','Fontsize',16);
+    ylabel('Modulated Signal s(t) (V)','FontWeight','bold','Fontsize',16);
+    title_name = "Modulated Signal in Time Domain (" + percent_modulation*100 + "% Modulation)";
+    title(title_name);
+    axis([-2e-3 2e-3 min(signal) max(signal)]);
+
+    % frequency domain
+    Sf1 = fft(fftshift(signal));
+    Sf = fftshift(Sf1);
+
+    nexttile;
+    freq_dom = plot(freq_vector, abs(Sf), 'LineWidth', 2);
+    freq_dom_ax = gca;
+    set(freq_dom_ax,'FontSize',16);
+    xlabel('Frequency (Hz)','FontWeight','bold','Fontsize',16);
+    ylabel('|M(f)|','FontWeight','bold','Fontsize',16);
+    title_name = "Magnitude Spectrum of the Modulated Signal (" + percent_modulation*100 + "% Modulation)";
+    title(title_name);
+    axis([-25e3 25e3 0 max(abs(Sf))]);
+
+    fig.WindowState = 'maximized';
+    export_dest = "../Report/Figures/" + file_name + ".png";
+    exportgraphics(fig, export_dest);
+end
 
 function yt = envelope_detector(signal, time_const, time_vector, N)
     tole = 0.1;
@@ -165,7 +188,7 @@ function yt = envelope_detector(signal, time_const, time_vector, N)
     yt(1)=yt(2);
 end
 
-function output_fig(signal, original, ka, time_vector, fig_num, RC_name, file_name, lpf) % lpf = 0 for no lpf, 1 for lpf
+function output_fig(signal, original, ka, time_vector, fig_num, percent_modulation, RC_name, file_name, lpf) % lpf = 0 for no lpf, 1 for lpf
     global sampling_rate;
 	global fm;
 
@@ -176,7 +199,7 @@ function output_fig(signal, original, ka, time_vector, fig_num, RC_name, file_na
         case 1
             tlayout = tiledlayout(1,3);
     end
-    title_name = "Output signals for R_LC = " + RC_name;
+    title_name = "Output signals for " + percent_modulation*100 + "% Modulation and R_LC = " + RC_name;
     title(tlayout, title_name,'FontWeight','bold','Fontsize',24);
 
     % output of envelope detector
