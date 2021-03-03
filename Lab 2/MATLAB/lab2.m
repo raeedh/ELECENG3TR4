@@ -4,7 +4,7 @@ format long e
 
 %% Generating time vector, frequency vector, carrier signal, message signal, and modulated signal
 N = 2^16; %No. of FFT samples
-global sampling_rate % global variable so we can use in functions
+global sampling_rate % global variable so it can be used in functions
 sampling_rate = 40e4; %unit Hz
 tstep = 1/sampling_rate;
 tmax = N*tstep/2;
@@ -21,7 +21,7 @@ Ac = 1;
 ct=Ac*cos(2*pi*fc*tt);
 
 %message signal
-global fm; % global variable so you can use in functions
+global fm; % global variable so it can be used in functions
 fm = 1e3;
 Tm = 0.0005;
 mt = -2*sinc(tt/Tm);
@@ -224,7 +224,7 @@ function output_fig(signal, original, ka, time_vector, fig_num, percent_modulati
     ylabel('y1(t) (V)','FontWeight','bold','Fontsize',16);
     title('After the DC removal');
     axis([-2e-3 2e-3 min(original) max(original)]);
-    
+      
     if (lpf == 1)
         nexttile;
         filtered_signal = plot(time_vector,lowpass(yt1, 1.1*fm, sampling_rate),'r',time_vector,original,'k','LineWidth',2);
