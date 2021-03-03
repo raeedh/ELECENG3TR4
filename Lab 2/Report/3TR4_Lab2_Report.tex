@@ -5,6 +5,7 @@
 \usepackage{hyperref}
 \usepackage{parskip}
 \usepackage{amsmath}
+\usepackage{bm}
 \usepackage[framed, numbered]{matlab-prettifier}
 \lstset{inputpath=../MATLAB}
 
@@ -68,7 +69,7 @@ To demodulate the signal, we pass the modulated signal through an envelope detec
 \lstinputlisting[style=Matlab-editor, caption={Envelope Detector}, label={listing:envelope}, firstline=166, firstnumber=166, lastline=189]{lab2.m}
 \lstinputlisting[style=Matlab-editor, caption={Demodulating the Signal}, label={listing:demod}, firstline=205, firstnumber=205, lastline=226]{lab2.m}
 
-\subsection*{Output Signals for Time Constant $R_LC = 1/f_c$}
+\subsection*{Output Signals for Time Constant $\bm{R_LC = 1/f_c}$}
 The output signals after demodulation for when the time constant of the envelope detector is set to $R_LC = 1/f_c$ are shown in Figure~\ref{fig:q2i}. We can observe that the upper envelope of the output signal does follow the original message signal closely, but there is significant rippling in the output signal. The rippling in the signal would introduce a significant offset if the signal is passed through a low-pass filter to reduce the rippling, as we can see that the center of the rippled message is significantly below the upper envelope of the output signal. The significant rippling suggests that the time constant used in this scenario is too low.
 \begin{figure}[h!]
     \centering
@@ -76,7 +77,7 @@ The output signals after demodulation for when the time constant of the envelope
     \caption{\label{fig:q2i}Demodulation Output for $R_LC = 1/f_c$}
 \end{figure}
 
-\subsection*{Output Signals for Time Constant $R_LC = 10T_m$}
+\subsection*{Output Signals for Time Constant $\bm{R_LC = 10T_m}$}
 The output signals after demodulation for when the time constant of the envelope detector is set to $R_LC = 10T_m$ are shown in Figure~\ref{fig:q2ii}. We can observe that the output signal lags behind the input signal significantly whenever there is a drop in the input signal, and the curve following the increasing portions of the input signal is very jagged. A significant portion of the input signal is lost whenever the is a drop in the input signal, and it would be impossible to accurately retrieve the input signal whenever the signal decreases too rapidly for the envelope to follow. The significant delay in following the input signal suggests that the time constant used in this scenario is too high.
 \begin{figure}[h!]
     \centering
@@ -99,7 +100,7 @@ Based on the observations of the output signal for when the time constant is equ
 \end{figure}
 
 \section*{Amplitude Modulation with over 100\% Modulation}
-The envelope detector can only detect the positive (upper) envelope of the signal. Therefore, whenever the envelopes of the signal change signs, the envelope detector is unable to retrieve the desired input signal. This can be seen when the same message signal and carrier are modulated with 200\% modulation instead of 50\% modulation. The modulated signal with 200\% modulation is shown in Figure~\ref{fig:q3_mod}. We can observe that the envelope of the signal (in dashed red lines) cross the y-axis multiple times, where the modulated signal in blue will also flip signs. The envelope detector will be able to realize that the sign of the envelope has changed, and will simply follow the upper envelope in those regions. Figure~\ref{fig:q3_demod} shows the demodulated sign after envelope detection, DC removal, and low-pass filtering. We can observe that the region of the demodulated signal where the modulated signal envelope flipped signs does not match the message signal. Therefore, we can conclude that it is impossible to retrieve a signal through amplitude modulation and demodulation when there is over 100\% modulation.
+The envelope detector can only detect the positive (upper) envelope of the signal. Therefore, whenever the envelopes of the signal change signs, the envelope detector is unable to retrieve the desired input signal. This can be seen when the same message signal and carrier are modulated with 200\% modulation instead of 50\% modulation. The modulated signal with 200\% modulation is shown in Figure~\ref{fig:q3_mod}. We can observe that the envelope of the signal (in dashed red lines) cross the y-axis multiple times, where the modulated signal in blue will also flip signs. The envelope detector will not be able to realize that the sign of the envelope has changed, and will simply follow the upper envelope in those regions. Figure~\ref{fig:q3_demod} shows the demodulated sign after envelope detection, DC removal, and low-pass filtering. We can observe that the region of the demodulated signal where the modulated signal envelope flipped signs does not match the message signal. Therefore, we can conclude that it is impossible to retrieve a signal through amplitude modulation and demodulation when there is over 100\% modulation.
 \begin{figure}[h!]
     \centering
     \includegraphics[width=\textwidth]{q3_mod}
