@@ -140,7 +140,8 @@ end
 
 function phase_Reversal(tt, tstep, mt, plot_max, plot_min)
     % plot phase reversals based on zeros in message signal
-    zci = @(v) find(v(:).*circshift(v(:), [-1 0]) <= 0); % find zeros
+    % zci = @(v) find(v(:).*circshift(v(:), [-1 0]) <= 0); % find zeros
+    zci = @(v) find(diff(sign(v)));
     zst = zci(mt); % find zeros of message signal
     zst = tt(zst);
     for x = zst
