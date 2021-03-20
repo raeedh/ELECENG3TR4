@@ -15,21 +15,16 @@ fmin = -fmax;
 fstep = (fmax-fmin)/N;
 freq = fmin:fstep:fmax-fstep;
 
-fc = 10e3;
-Ac = 1;
+fc = 10e3; Ac = 1;
 %In-phase carrier
 ct1= Ac * cos(2*pi*fc*tt);
-
 %The first message signal
 tau_m = 0.001;
 mt1 = 2*sinc(tt/tau_m);
-
 %DSB-SC1
 st1 = mt1.*ct1;
-
 %Quad. carrier
 ct2 = Ac * sin(2*pi*fc*tt);
-
 %The second message signal
 mt2 = sinc(tt/tau_m).^2;
 %DSB-SC2
