@@ -7,3 +7,5 @@
 !*.tex
 !*.m
 !*.png
+!*.docx
+!*.mat
