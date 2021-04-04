@@ -112,8 +112,12 @@ end
 fig = figure(7);
 plot(tt, yt2.yt);
 xlim([-100*tstep 100*tstep]);
-title("Time Domain");
+title("Signal yt(n): Time Domain");
+xlabel("Time (s)", 'FontWeight', 'bold');
+ylabel("y(t)", 'FontWeight', 'bold');
 fig.WindowState = 'maximized';
+export_dest = "../Report/Figures/exp2_time.png";
+exportgraphics(fig, export_dest);
 
 % NUMERICAL EXPERIMENT 3
 
