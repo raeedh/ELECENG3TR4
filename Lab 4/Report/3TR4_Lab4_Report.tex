@@ -44,13 +44,12 @@ Autocorrelation function.
 \end{aligned}
 \end{equation*}
 
-PSD is just the Fourier transform of the autocorrelation function.
+PSD is just the Fourier transform of the autocorrelation function. k is the gain of the noise.
 \begin{equation*}
 \begin{aligned}
-        S_y(f) &= \sigma_w^2 \left | H(f) \right |^2 \\
-        &= \sigma_w^2 rect(\frac{f}{2\cdot 250}) \\
-        &= \sigma_w^2 rect(\frac{f}{500}) \\
-        &= \frac{N_0}{2} rect(\frac{f}{500}) \\
+        S_y(f) &= k \left | H(f) \right |^2 \\
+        &= k rect(\frac{f}{2\cdot 250}) \\
+        &= k rect(\frac{f}{500}) \\
 \end{aligned}
 \end{equation*}
 
@@ -79,6 +78,28 @@ PSD is just the Fourier transform of the autocorrelation function.
 \section*{Numerical Experiment \#2: A sinusoid buried in noise}
 
 % For this section, provide the theoretical calculations (i.e. derivations of analytical expressions for autocorrelation and PSD of the AWGN channel output. Refer to lecture notes). Compare the theoretical autocorrelation function and PSD with those from your program (qualitatively).
+Autocorrelation function.
+\begin{equation*}
+\begin{aligned}
+        y(t) &= Asin(2\pi f_ct + \Theta) \\
+        
+	R_y(m) &= E\left[y(n)\cdot y(n+m)\right] \\
+        &= \sum_k\sum_j h(k)h(j)E[w(n-k)w(n+m-j)] \\
+	&= \sum_k h(k)h(k+m)\sigma_w^2 \\
+        &= \sum_k (500sinc(500k))(500sinc(500(k+m)))\sigma_w^2 \\
+        &= \sum_k 250000sinc(500k)sinc(500(k+m))\sigma_w^2 \\
+\end{aligned}
+\end{equation*}
+
+PSD is just the Fourier transform of the autocorrelation function.
+\begin{equation*}
+\begin{aligned}
+        S_y(f) &= \sigma_w^2 \left | H(f) \right |^2 \\
+        &= \sigma_w^2 rect(\frac{f}{2\cdot 250}) \\
+        &= \sigma_w^2 rect(\frac{f}{500}) \\
+        &= \frac{N_0}{2} rect(\frac{f}{500}) \\
+\end{aligned}
+\end{equation*}
 
 % (i) Do you observe a peak at the zero lag in the autocorrelation plot? Explain its origin.
 
