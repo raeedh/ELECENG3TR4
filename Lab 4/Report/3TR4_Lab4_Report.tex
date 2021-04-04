@@ -45,7 +45,14 @@ Autocorrelation function.
 \end{equation*}
 
 PSD is just the Fourier transform of the autocorrelation function.
-
+\begin{equation*}
+\begin{aligned}
+        S_y(f) &= \sigma_w^2 \left | H(f) \right |^2 \\
+        &= \sigma_w^2 rect(\frac{f}{2\cdot 250}) \\
+        &= \sigma_w^2 rect(\frac{f}{500}) \\
+        &= \frac{N_0}{2} rect(\frac{f}{500}) \\
+\end{aligned}
+\end{equation*}
 
 % (ii) change the maxlag from 100 to 200 and then to 500 and observe its impact on the PSD and comment. Include plots of all relevant quantities.
 
