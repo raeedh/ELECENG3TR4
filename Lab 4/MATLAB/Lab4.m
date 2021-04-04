@@ -2,6 +2,8 @@
 %experiments of Lab3
 clear 
 format long e
+set(0,'DefaultAxesFontSize',16);
+
 tend = 10;
 tbeg = -10;
 N=100000;
@@ -13,7 +15,7 @@ tt = tbeg:tstep:tend-tstep;
 
 % NUMERICAL EXPERIMENT 1
 
-yt1 = load('lab4_num_expt1');
+yt1 = load('../lab4_num_expt1');
 
 lag = [100 200 500];
 
@@ -40,22 +42,28 @@ for i = 1:3
 
    nexttile;
    plot(tau_vec, Ry);
-   title("Autocorrelation vs lag");
+   title("Autocorrelation R_y");
    subtitle("maxlag = " + num2str(maxlag));
+   xlabel("\tau (s)", 'FontWeight', 'bold');
+   ylabel("R_x", 'FontWeight', 'bold');
    ylim([min(Ry) max(Ry)]);
    yline(0);
 
    nexttile;
    plot(freq, Sy);
-   title("Absolute PSD");
+   title("Absolute Power Density Function");
    subtitle("maxlag = " + num2str(maxlag));
+   xlabel("Frequency (Hz)", 'FontWeight', 'bold');
+   ylabel("|S_y|", 'FontWeight', 'bold');
    
    fig.WindowState = 'maximized';
+   export_dest = "../Report/Figures/exp1_maxlag_" + num2str(maxlag) + ".png"; 
+   exportgraphics(fig, export_dest);
 end
 
 % NUMERICAL EXPERIMENT 2
 
-yt2 = load('lab4_num_expt2');
+yt2 = load('../lab4_num_expt2');
 
 lag = [100 200 2000];
 
@@ -102,7 +110,7 @@ fig.WindowState = 'maximized';
 
 % NUMERICAL EXPERIMENT 3
 
-exp3_vals = load('lab4_num_expt3');
+exp3_vals = load('../lab4_num_expt3');
 exp3_xt = exp3_vals.xt;
 exp3_yt = exp3_vals.yt;
 
@@ -139,6 +147,4 @@ plot(tau_vec, R_xy);
 [m, i] = max(R_xy);
 tau_vec(i)
 
-
-
-
+set(0,'DefaultAxesFontSize','remove');
