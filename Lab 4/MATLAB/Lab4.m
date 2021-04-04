@@ -51,7 +51,7 @@ for i = 1:3
 
    nexttile;
    plot(freq, Sy);
-   title("Absolute Power Density Function");
+   title("Absolute Power Spectral Density");
    subtitle("maxlag = " + num2str(maxlag));
    xlabel("Frequency (Hz)", 'FontWeight', 'bold');
    ylabel("|S_y|", 'FontWeight', 'bold');
@@ -99,7 +99,7 @@ for i = 4:6
 
    nexttile;
    plot(freq, Sy);
-   title("Absolute Power Density Function");
+   title("Absolute Power Spectral Density");
    subtitle("maxlag = " + num2str(maxlag));
    xlabel("Frequency (Hz)", 'FontWeight', 'bold');
    ylabel("|S_y|", 'FontWeight', 'bold');
