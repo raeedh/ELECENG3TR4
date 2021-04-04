@@ -81,13 +81,12 @@ PSD is just the Fourier transform of the autocorrelation function. k is the gain
 Autocorrelation function.
 \begin{equation*}
 \begin{aligned}
-        y(t) &= A\sin(2\pi f_ct + \theta) \\
-        
-	R_y(m) &= E\left[y(n)\cdot y(n+m)\right] \\
-        &= \sum_k\sum_j h(k)h(j)E[w(n-k)w(n+m-j)] \\
-	&= \sum_k h(k)h(k+m)\sigma_w^2 \\
-        &= \sum_k (500sinc(500k))(500sinc(500(k+m)))\sigma_w^2 \\
-        &= \sum_k 250000sinc(500k)sinc(500(k+m))\sigma_w^2 \\
+        y(t) &= A\sin(2\pi f_ct + \theta) + w(t) \\
+	R_y(\tau) &= E\left\{y(t)y(t+\tau)\right\} \\
+        &= E\left \{\left[ A\sin(\underbrace{2 \pi f_c t + \theta}_{x}) + w(t) \right]\cdot \left[ A\sin(\underbrace{2 \pi f_c (t+\tau) + \theta}_{y}) + w(t+\tau) \right] \right \} \\
+        &= E\left \{A^2\sin(x)\sin(y) + A\sin(x)\cdot w(t+\tau) + w(t)\cdot A\sin(y) + w(t)\cdot w(t+\tau)\right \} \\
+        &= \frac{A^2}{2}\sin(2\pi f_c \tau) + 0 + 0 + \frac{N_0}{2}\delta(\tau) \\
+        &= \frac{A^2}{2} \sin(2\pi f_c \tau) + \frac{N_0}{2}\delta(\tau) \\
 \end{aligned}
 \end{equation*}
 
