@@ -7,6 +7,7 @@
 \usepackage{amsmath}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{enumitem}
 \usepackage[framed, numbered]{matlab-prettifier}
 \lstset{inputpath=../MATLAB}
 
@@ -29,51 +30,57 @@
 
 \section*{Numerical Experiment \#1: Evaluation of Autocorrelation and Power Spectral Density}
 
-% (i) calculate the theoretical autocorrelation function of the output, and the corresponding PSD using the methodology discussed in class. Compare (qualitatively) your theoretical results with those from your program, and explain any discrepancies. Note that the amplitude (i.e. y-axis) of PSD of the matlab could be different from that of the theoretical PSD because of the difference between DFT and Fourier transform.
-Autocorrelation function.
-\begin{equation*}
-\begin{aligned}
-        y(n) &= h(n)\ast w(n) \\
-        h(n) &= 2B\sinc(2Bn) \\
-        &= 2\cdot 250sinc(2\cdot 250 n) \\
-	R_y(m) &= E\left[y(n)\cdot y(n+m)\right] \\
-        &= \sum_k\sum_j h(k)h(j)E[w(n-k)w(n+m-j)] \\
-	&= \sum_k h(k)h(k+m)\sigma_w^2 \\
-        &= \sum_k (500\sinc(500k))(500\sinc(500(k+m)))\sigma_w^2 \\
-        &= \sum_k 250000\sinc(500k)\sinc(500(k+m))\sigma_w^2 \\
-\end{aligned}
-\end{equation*}
+\begin{enumerate}[label=\roman*)]
+	\item % (i) calculate the theoretical autocorrelation function of the output, and the corresponding PSD using the methodology discussed in class. Compare (qualitatively) your theoretical results with those from your program, and explain any discrepancies. Note that the amplitude (i.e. y-axis) of PSD of the matlab could be different from that of the theoretical PSD because of the difference between DFT and Fourier transform.
+	The theoretical autocorrelation function of the output is derived in Equation~\ref{eq:exp1_autocorr}.
+	\begin{equation} \label{eq:exp1_autocorr}
+	\begin{aligned}[b]
+			y(n) &= h(n)\ast w(n) \\
+			h(n) &= 2B\sinc(2Bn) \\
+			&= 2\cdot 250sinc(2\cdot 250 n) \\
+			R_y(m) &= E\left[y(n)\cdot y(n+m)\right] \\
+			&= \sum_k\sum_j h(k)h(j)E[w(n-k)w(n+m-j)] \\
+			&= \sum_k h(k)h(k+m)\sigma_w^2 \\
+			&= \sum_k (500\sinc(500k))(500\sinc(500(k+m)))\sigma_w^2 \\
+			&= \sum_k 250000\sinc(500k)\sinc(500(k+m))\sigma_w^2 \\
+	\end{aligned}
+	\end{equation}
+	The PSD is just the Fourier transform of the autocorrelation function. The PSD is derived in Equation~\ref{eq:exp1_psd}, where k is the gain of the noise.
+	\begin{equation} \label{eq:exp1_psd}
+	\begin{aligned}[b]
+			S_y(f) &= k \left | H(f) \right |^2 \\
+			&= k \rect(\frac{f}{2\cdot 250}) \\
+			&= k \rect(\frac{f}{500}) \\
+	\end{aligned}
+	\end{equation}
 
-PSD is just the Fourier transform of the autocorrelation function. k is the gain of the noise.
-\begin{equation*}
-\begin{aligned}
-        S_y(f) &= k \left | H(f) \right |^2 \\
-        &= k \rect(\frac{f}{2\cdot 250}) \\
-        &= k \rect(\frac{f}{500}) \\
-\end{aligned}
-\end{equation*}
+	The theoretical results from Equation~\ref{eq:exp1_autocorr} and Equation~\ref{eq:exp1_psd} can be compared to the results of the numerical experiment in Figure~\ref{fig:exp1_maxlag100}. We can see that both the autocorrelation and PSD match between the theoretical results and the numerical results. Both autocorrelation functions result in $\sinc$ functions with the same frequency. Similarly, both PSDs produce a $\rect$ function with a bandwidth of 250 Hz, although is noise in the passband of the MATLAB PSD, as the signal used for the MATLAB plot does not use an ideal white noise signal.
 
-% (ii) change the maxlag from 100 to 200 and then to 500 and observe its impact on the PSD and comment. Include plots of all relevant quantities.
+	\item % (ii) change the maxlag from 100 to 200 and then to 500 and observe its impact on the PSD and comment. Include plots of all relevant quantities.
+	We can see the impact of increasing the maxlag to 200 in Figure~\ref{fig:exp1_maxlag200} and increasing the maxlag to 500 in Figure~\ref{fig:exp1_maxlag500}. We can see that there is more information in the PSD as we increase the maxlag, as doing so increases the frequency resolution of our PSD.
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\textwidth]{exp1_maxlag_100}
-	\caption{\label{fig:exp1_maxlag100}Autocorrelation and PSD for maxlag = 100}
-\end{figure}
+	\item % (iii) Estimate the bandwidth of the filter using the autocorrelation plot. Hint: measure the locations of zeros of sinc and compare it with the theoretical calculation. 
+	We can estimate the bandwidth of the filter using the autocorrelation plot. We can see that in all three plots of the autocorrelation function, the zeros of the $\sinc$ function are spaced $0.002$ seconds apart. This means the $\sinc$ function repeats peaks and troughs every $0.004$ seconds. We can determine the bandwidth of the filter to be $\frac{1}{0.004\text{ s}}$ or 250 Hz.
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\textwidth]{exp1_maxlag_200}
-	\caption{\label{fig:exp1_maxlag200}Autocorrelation and PSD for maxlag = 200}
-\end{figure}
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.78\textwidth]{exp1_maxlag_100}
+		\caption{\label{fig:exp1_maxlag100}Autocorrelation and PSD for maxlag = 100}
+	\end{figure}
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\textwidth]{exp1_maxlag_500}
-	\caption{\label{fig:exp1_maxlag500}Autocorrelation and PSD for maxlag = 500}
-\end{figure}
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.78\textwidth]{exp1_maxlag_200}
+		\caption{\label{fig:exp1_maxlag200}Autocorrelation and PSD for maxlag = 200}
+	\end{figure}
+	
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.78\textwidth]{exp1_maxlag_500}
+		\caption{\label{fig:exp1_maxlag500}Autocorrelation and PSD for maxlag = 500}
+	\end{figure}
 
-% (iii) Estimate the bandwidth of the filter using the autocorrelation plot. Hint: measure the locations of zeros of sinc and compare it with the theoretical calculation. 
+\end{enumerate} \clearpage
 
 \section*{Numerical Experiment \#2: A sinusoid buried in noise}
 
@@ -81,12 +88,12 @@ PSD is just the Fourier transform of the autocorrelation function. k is the gain
 Autocorrelation function.
 \begin{equation*}
 \begin{aligned}
-        y(t) &= A\sin(2\pi f_ct + \theta) + w(t) \\
+	y(t) &= A\sin(2\pi f_ct + \theta) + w(t) \\
 	R_y(\tau) &= E\left\{y(t)y(t+\tau)\right\} \\
-        &= E\left \{\left[ A\sin(\underbrace{2 \pi f_c t + \theta}_{x}) + w(t) \right]\cdot \left[ A\sin(\underbrace{2 \pi f_c (t+\tau) + \theta}_{y}) + w(t+\tau) \right] \right \} \\
-        &= E\left \{A^2\sin(x)\sin(y) + A\sin(x)\cdot w(t+\tau) + w(t)\cdot A\sin(y) + w(t)\cdot w(t+\tau)\right \} \\
-        &= \frac{A^2}{2}\sin(2\pi f_c \tau) + 0 + 0 + \frac{N_0}{2}\delta(\tau) \\
-        &= \frac{A^2}{2} \sin(2\pi f_c \tau) + \frac{N_0}{2}\delta(\tau) \\
+	&= E\left \{\left[ A\sin(\underbrace{2 \pi f_c t + \theta}_{x}) + w(t) \right]\cdot \left[ A\sin(\underbrace{2 \pi f_c (t+\tau) + \theta}_{y}) + w(t+\tau) \right] \right \} \\
+	&= E\left \{A^2\sin(x)\sin(y) + A\sin(x)\cdot w(t+\tau) + w(t)\cdot A\sin(y) + w(t)\cdot w(t+\tau)\right \} \\
+	&= \frac{A^2}{2}\sin(2\pi f_c \tau) + 0 + 0 + \frac{N_0}{2}\delta(\tau) \\
+	&= \frac{A^2}{2} \sin(2\pi f_c \tau) + \frac{N_0}{2}\delta(\tau) \\
 \end{aligned}
 \end{equation*}
 
@@ -94,9 +101,9 @@ PSD is just the Fourier transform of the autocorrelation function.
 \begin{equation*}
 \begin{aligned}
 	R_y(\tau) &= \frac{A^2}{2} \sin(2\pi f_c \tau) + \frac{N_0}{2}\delta(\tau) \\
-        S_y(f) &= \left |F\left \{\frac{A^2}{2} \sin(2\pi f_c \tau) \right \} + F\left \{\frac{N_0}{2}\delta(\tau) \right \}\right | \\
-        &= \left | i \cdot \frac{A^2}{4} \left [\delta(f - f_c) - \delta(f + f_c)\right ]\right | + \frac{N_0}{2} \\
-        &= \frac{A^2}{4} \left [\delta(f - f_c) - \delta(f + f_c)\right ] + \frac{N_0}{2}
+	S_y(f) &= \left |F\left \{\frac{A^2}{2} \sin(2\pi f_c \tau) \right \} + F\left \{\frac{N_0}{2}\delta(\tau) \right \}\right | \\
+	&= \left | i \cdot \frac{A^2}{4} \left [\delta(f - f_c) - \delta(f + f_c)\right ]\right | + \frac{N_0}{2} \\
+	&= \frac{A^2}{4} \left [\delta(f - f_c) - \delta(f + f_c)\right ] + \frac{N_0}{2}
 \end{aligned}
 \end{equation*}
 
