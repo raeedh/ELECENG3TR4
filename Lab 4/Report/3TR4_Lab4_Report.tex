@@ -93,10 +93,10 @@ Autocorrelation function.
 PSD is just the Fourier transform of the autocorrelation function.
 \begin{equation*}
 \begin{aligned}
-        S_y(f) &= \sigma_w^2 \left | H(f) \right |^2 \\
-        &= \sigma_w^2 rect(\frac{f}{2\cdot 250}) \\
-        &= \sigma_w^2 rect(\frac{f}{500}) \\
-        &= \frac{N_0}{2} rect(\frac{f}{500}) \\
+	R_y(\tau) &= \frac{A^2}{2} \sin(2\pi f_c \tau) + \frac{N_0}{2}\delta(\tau) \\
+        S_y(f) &= \left |F\left \{\frac{A^2}{2} \sin(2\pi f_c \tau) \right \} + F\left \{\frac{N_0}{2}\delta(\tau) \right \}\right | \\
+        &= \left | i \cdot \frac{A^2}{4} \left [\delta(f - f_c) - \delta(f + f_c)\right ]\right | + \frac{N_0}{2} \\
+        &= \frac{A^2}{4} \left [\delta(f - f_c) - \delta(f + f_c)\right ] + \frac{N_0}{2}
 \end{aligned}
 \end{equation*}
 
