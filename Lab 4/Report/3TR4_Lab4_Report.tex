@@ -30,14 +30,21 @@
 \section*{Numerical Experiment \#1: Evaluation of Autocorrelation and Power Spectral Density}
 
 % (i) calculate the theoretical autocorrelation function of the output, and the corresponding PSD using the methodology discussed in class. Compare (qualitatively) your theoretical results with those from your program, and explain any discrepancies. Note that the amplitude (i.e. y-axis) of PSD of the matlab could be different from that of the theoretical PSD because of the difference between DFT and Fourier transform.
+Autocorrelation function.
 \begin{equation*}
 \begin{aligned}
         y(n) &= h(n)\ast w(n) \\
+        h(n) &= 2Bsinc(2Bn) \\
+        &= 2\cdot 250sinc(2\cdot 250 n) \\
 	R_y(m) &= E\left[y(n)\cdot y(n+m)\right] \\
         &= \sum_k\sum_j h(k)h(j)E[w(n-k)w(n+m-j)] \\
-	&= \sum_k h(k)h(k+m)\sigma^2
+	&= \sum_k h(k)h(k+m)\sigma_w^2 \\
+        &= \sum_k (500sinc(500k))(500sinc(500(k+m)))\sigma_w^2 \\
+        &= \sum_k 250000sinc(500k)sinc(500(k+m))\sigma_w^2 \\
 \end{aligned}
 \end{equation*}
+
+PSD is just the Fourier transform of the autocorrelation function.
 
 
 % (ii) change the maxlag from 100 to 200 and then to 500 and observe its impact on the PSD and comment. Include plots of all relevant quantities.
