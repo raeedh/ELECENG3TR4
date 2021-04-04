@@ -45,7 +45,7 @@ for i = 1:3
    title("Autocorrelation R_y");
    subtitle("maxlag = " + num2str(maxlag));
    xlabel("\tau (s)", 'FontWeight', 'bold');
-   ylabel("R_x", 'FontWeight', 'bold');
+   ylabel("R_y", 'FontWeight', 'bold');
    ylim([min(Ry) max(Ry)]);
    yline(0);
 
@@ -57,7 +57,7 @@ for i = 1:3
    ylabel("|S_y|", 'FontWeight', 'bold');
    
    fig.WindowState = 'maximized';
-   export_dest = "../Report/Figures/exp1_maxlag_" + num2str(maxlag) + ".png"; 
+   export_dest = "../Report/Figures/exp1_maxlag_" + num2str(maxlag) + ".png";
    exportgraphics(fig, export_dest);
 end
 
@@ -90,16 +90,23 @@ for i = 4:6
 
    nexttile;
    plot(tau_vec, Ry);
-   title("Autocorrelation vs lag");
+   title("Autocorrelation R_y");
    subtitle("maxlag = " + num2str(maxlag));
+   xlabel("\tau (s)", 'FontWeight', 'bold');
+   ylabel("R_y", 'FontWeight', 'bold');
+   ylim([min(Ry) max(Ry)]);
    yline(0);
 
    nexttile;
    plot(freq, Sy);
-   title("Absolute PSD");
+   title("Absolute Power Density Function");
    subtitle("maxlag = " + num2str(maxlag));
+   xlabel("Frequency (Hz)", 'FontWeight', 'bold');
+   ylabel("|S_y|", 'FontWeight', 'bold');
    
    fig.WindowState = 'maximized';
+   export_dest = "../Report/Figures/exp2_maxlag_" + num2str(maxlag) + ".png";
+   exportgraphics(fig, export_dest);
 end
 
 fig = figure(7);
