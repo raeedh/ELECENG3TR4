@@ -113,8 +113,10 @@ fig = figure(7);
 plot(tt, yt2.yt);
 xlim([-100*tstep 100*tstep]);
 title("Signal yt(n): Time Domain");
+subtitle("$y(t)$", 'interpreter', 'latex')
 xlabel("Time (s)", 'FontWeight', 'bold');
 ylabel("y(t)", 'FontWeight', 'bold');
+
 fig.WindowState = 'maximized';
 export_dest = "../Report/Figures/exp2_time.png";
 exportgraphics(fig, export_dest);
@@ -130,13 +132,21 @@ t = tiledlayout(1,2);
 
 nexttile;
 plot(tt, exp3_xt);
-title("xt");
+title("Signal x: Time Domain");
+subtitle("$x(t)$", 'interpreter', 'latex');
+xlabel("Time (s)", 'FontWeight', 'bold');
+ylabel("x(t)", 'FontWeight', 'bold');
 
 nexttile;
 plot(tt, exp3_yt);
-title("yt");
+title("Signal y: Time Domain");
+subtitle("$y(t)$", 'interpreter', 'latex');
+xlabel("Time (s)", 'FontWeight', 'bold');
+ylabel("y(t)", 'FontWeight', 'bold');
 
 fig.WindowState = 'maximized';
+export_dest = "../Report/Figures/exp3_time.png";
+exportgraphics(fig, export_dest);
 
 maxlag = 20000;
 R_xy = xcorr(exp3_yt,exp3_xt,maxlag);
@@ -154,6 +164,14 @@ freq = fmin:fstep:fmax-fstep;
 
 fig = figure(9);
 plot(tau_vec, R_xy);
+title("Autocorrelation R_{xy}");
+subtitle("maxlag = " + num2str(maxlag));
+xlabel("\tau (s)", 'FontWeight', 'bold');
+ylabel("R_{xy}", 'FontWeight', 'bold');
+
+fig.WindowState = 'maximized';
+export_dest = "../Report/Figures/exp3_autocorr.png";
+exportgraphics(fig, export_dest);
 
 [m, i] = max(R_xy);
 tau_vec(i)
