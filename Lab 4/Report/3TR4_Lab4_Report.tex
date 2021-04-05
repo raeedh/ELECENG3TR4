@@ -85,9 +85,10 @@
 \section*{Numerical Experiment \#2: A sinusoid buried in noise}
 
 % For this section, provide the theoretical calculations (i.e. derivations of analytical expressions for autocorrelation and PSD of the AWGN channel output. Refer to lecture notes). Compare the theoretical autocorrelation function and PSD with those from your program (qualitatively).
-Autocorrelation function.
-\begin{equation*}
-\begin{aligned}
+
+The theoretical autocorrelation function of the output is derived in Equation~\ref{eq:exp2_autocorr}.
+\begin{equation} \label{eq:exp2_autocorr}
+\begin{aligned}[b]
 	y(t) &= A\sin(2\pi f_ct + \theta) + w(t) \\
 	R_y(\tau) &= E\left\{y(t)y(t+\tau)\right\} \\
 	&= E\left \{\left[ A\sin(\underbrace{2 \pi f_c t + \theta}_{x}) + w(t) \right]\cdot \left[ A\sin(\underbrace{2 \pi f_c (t+\tau) + \theta}_{y}) + w(t+\tau) \right] \right \} \\
@@ -95,47 +96,76 @@ Autocorrelation function.
 	&= \frac{A^2}{2}\sin(2\pi f_c \tau) + 0 + 0 + \frac{N_0}{2}\delta(\tau) \\
 	&= \frac{A^2}{2} \sin(2\pi f_c \tau) + \frac{N_0}{2}\delta(\tau) \\
 \end{aligned}
-\end{equation*}
+\end{equation}
 
-PSD is just the Fourier transform of the autocorrelation function.
-\begin{equation*}
-\begin{aligned}
+The PSD is just the Fourier transform of the autocorrelation function. The PSD is derived in Equation~\ref{eq:exp2_psd}.
+\begin{equation} \label{eq:exp2_psd}
+\begin{aligned}[b]
 	R_y(\tau) &= \frac{A^2}{2} \sin(2\pi f_c \tau) + \frac{N_0}{2}\delta(\tau) \\
 	S_y(f) &= \left |F\left \{\frac{A^2}{2} \sin(2\pi f_c \tau) \right \} + F\left \{\frac{N_0}{2}\delta(\tau) \right \}\right | \\
 	&= \left | i \cdot \frac{A^2}{4} \left [\delta(f - f_c) - \delta(f + f_c)\right ]\right | + \frac{N_0}{2} \\
 	&= \frac{A^2}{4} \left [\delta(f - f_c) - \delta(f + f_c)\right ] + \frac{N_0}{2}
 \end{aligned}
-\end{equation*}
+\end{equation}
 
-% (i) Do you observe a peak at the zero lag in the autocorrelation plot? Explain its origin.
+The theoretical results from Equation~\ref{eq:exp2_autocorr} and Equation~\ref{eq:exp2_psd} can be compared to the results of the numerical experiment in Figure~\ref{fig:exp2_maxlag100}. We can see that both the autocorrelation and PSD match between the theoretical results and the numerical results. Both autocorrelation functions result in $\sin$ functions with an impulse at $\tau = 0$. Similarly, both PSDs produce two impulses at what should be $-f_c$ and $f_c$, with a floor caused by the noise.
 
-% (ii) Change the maxlag from 100 to 200 and then to 20000and observe its impact on the frequency resolution. Estimating the frequency, fc in the frequency domain and provide a table of measurements for the maxlag of 100, 200 and 20000. Do the frequency estimates converge? Explain the connection between the maxlog and frequency resolution.
+\begin{enumerate}[label=\roman*)]
+	\item % (i) Do you observe a peak at the zero lag in the autocorrelation plot? Explain its origin.
+	There is a peak at the zero lag in the autocorrelation plot. This peak is caused by the impulse in the autocorrelation function due to the white noise.
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\textwidth]{exp2_maxlag_100}
-	\caption{\label{fig:exp2_maxlag100}Autocorrelation and PSD for maxlag = 100}
-\end{figure}
+	\item % (ii) Change the maxlag from 100 to 200 and then to 20000and observe its impact on the frequency resolution. Estimating the frequency, fc in the frequency domain and provide a table of measurements for the maxlag of 100, 200 and 20000. Do the frequency estimates converge? Explain the connection between the maxlog and frequency resolution.
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\textwidth]{exp2_maxlag_200}
-	\caption{\label{fig:exp2_maxlag200}Autocorrelation and PSD for maxlag = 200}
-\end{figure}
+	We can see the impact of increasing the maxlag to 200 in Figure~\ref{fig:exp2_maxlag200} and increasing the maxlag to 20000 in Figure~\ref{fig:exp2_maxlag2000}. As we increase the maxlag the frequency resolution of the PSD increases, resulting in narrower peaks in the PSD plots. A table of measurements for the measured frequency estimates for $f_c$ at each maxlag value is shown in Table~\ref{table:exp2}. We can see that as the value of maxlag increases, the frequency estimate for $f_c$ approaches 250 Hz due the the increase in frequency resolution. As maxlag increases, the size of the $\tau$ vector increases. The size of the frequency vector is dependent on the size of the $\tau$ vector. As the range of the frequency vector does not change, the increase in the number of frequency samples in the vector due to an increase maxlag increases the resolution of the frequency vector.
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\textwidth]{exp2_maxlag_2000}
-	\caption{\label{fig:exp2_maxlag2000}Autocorrelation and PSD for maxlag = 2000}
-\end{figure}
+	\begin{table}[h]
+		\centering
+		\begin{tabular}{c|c}
+			maxlag & $f_c$  \\ \hline
+			100    & 236.32 \\
+			200    & 243.14 \\
+			20000  & 249.93
+		\end{tabular}
+		\caption{\label{table:exp2}Table of Measurements of maxlag and $f_c$}
+	\end{table}
 
-% (iii) Plot yt as a function of time. It is the sinusoidal signal buried in noise (i.e. x(t) plus white noise). Can you estimate the frequency, fc directly from yt, without calculating the correlation? Explain.
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=\textwidth]{exp2_maxlag_100}
+		\caption{\label{fig:exp2_maxlag100}Autocorrelation and PSD for maxlag = 100}
+	\end{figure}
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\textwidth]{exp2_time}
-	\caption{\label{fig:exp2_time}Time Domain}
-\end{figure}
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=\textwidth]{exp2_maxlag_200}
+		\caption{\label{fig:exp2_maxlag200}Autocorrelation and PSD for maxlag = 200}
+	\end{figure}
+
+	\clearpage
+	
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.8\textwidth]{exp2_maxlag_20000}
+		\caption{\label{fig:exp2_maxlag2000}Autocorrelation and PSD for maxlag = 20000}
+	\end{figure}
+
+	\item % (iii) Plot yt as a function of time. It is the sinusoidal signal buried in noise (i.e. x(t) plus white noise). Can you estimate the frequency, fc directly from yt, without calculating the correlation? Explain.
+	The signal $yt$ is plotted as a function of time in Figure~\ref{fig:exp2_time}. We can see that the sinusoidal signal is buried in noise. We can estimate the frequency $f_c$ directly from $yt$ by taking the FFT of $yt$. We can clearly see in the FFT of $yt$ shown in Figure~\ref{fig:exp2_fft} that the frequency $f_c$ of the output signal $yt$ is around 250 Hz, which matches our $f_c$ estimates from after calculating the correlation. However, if the signal was buried in even more noise, it might not be possible to recover the signal with this methodology. In this case, it could even be possible to estimate the frequency of the signal by looking at the output signal $yt$ in the time domain in Figure~\ref{fig:exp2_time}.
+
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.86\textwidth]{exp2_time}
+		\caption{\label{fig:exp2_time}Signal $yt$: Time Domain}
+	\end{figure}
+
+	\clearpage
+
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=\textwidth]{exp2_fft}
+		\caption{\label{fig:exp2_fft}Signal $yt$: Magnitude Spectrum}
+	\end{figure}
+\end{enumerate}
 
 \section*{Numerical Experiment \#3: Delay Estimation}
 

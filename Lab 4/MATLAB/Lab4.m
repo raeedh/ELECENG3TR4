@@ -20,93 +20,101 @@ yt1 = load('../lab4_num_expt1');
 lag = [100 200 500];
 
 for i = 1:3
-   fig = figure(i);
-   tiledlayout(1,2);
+    fig = figure(i);
+    tiledlayout(1,2);
    
-	% maxlag = 100;
-   maxlag = lag(i);
-	%Autocorrelation of yt
-	Ry  = xcorr(yt1.yt,yt1.yt,maxlag);
-	%tau vector
-	tau_vec = -(maxlag*tstep):tstep:maxlag*tstep;
-	%Abs. PSD corresponding to yt
-	Sy = abs(fftshift(fft(fftshift(Ry))));
-	%define the frequency vector corresponding to tau_vec
-	Ntau = length(tau_vec);
-	%Nyquist sampling rate
+    % maxlag = 100;
+    maxlag = lag(i);
+    %Autocorrelation of yt
+    Ry  = xcorr(yt1.yt,yt1.yt,maxlag);
+    %tau vector
+    tau_vec = -(maxlag*tstep):tstep:maxlag*tstep;
+    %Abs. PSD corresponding to yt
+    Sy = abs(fftshift(fft(fftshift(Ry))));
+    %define the frequency vector corresponding to tau_vec
+    Ntau = length(tau_vec);
+    %Nyquist sampling rate
+    fmax = sampling_rate/2; 
 	fmax = sampling_rate/2; 
-	fmin = -fmax;
-	fstep = (fmax-fmin)/Ntau;
-	%Frequency window
-	freq = fmin:fstep:fmax-fstep;
+    fmax = sampling_rate/2; 
+    fmin = -fmax;
+    fstep = (fmax-fmin)/Ntau;
+    %Frequency window
+    freq = fmin:fstep:fmax-fstep;
 
-   nexttile;
-   plot(tau_vec, Ry);
-   title("Autocorrelation R_y");
-   subtitle("maxlag = " + num2str(maxlag));
-   xlabel("\tau (s)", 'FontWeight', 'bold');
-   ylabel("R_y", 'FontWeight', 'bold');
-   ylim([min(Ry) max(Ry)]);
-   yline(0);
+    nexttile;
+    plot(tau_vec, Ry);
+    title("Autocorrelation R_y");
+    subtitle("maxlag = " + num2str(maxlag));
+    xlabel("\tau (s)", 'FontWeight', 'bold');
+    ylabel("R_y", 'FontWeight', 'bold');
+    ylim([min(Ry) max(Ry)]);
+    yline(0);
 
-   nexttile;
-   plot(freq, Sy);
-   title("Absolute Power Spectral Density");
-   subtitle("maxlag = " + num2str(maxlag));
-   xlabel("Frequency (Hz)", 'FontWeight', 'bold');
-   ylabel("|S_y|", 'FontWeight', 'bold');
-   
-   fig.WindowState = 'maximized';
-   export_dest = "../Report/Figures/exp1_maxlag_" + num2str(maxlag) + ".png";
-   exportgraphics(fig, export_dest);
+    nexttile;
+    plot(freq, Sy);
+    title("Absolute Power Spectral Density");
+    subtitle("maxlag = " + num2str(maxlag));
+    xlabel("Frequency (Hz)", 'FontWeight', 'bold');
+    ylabel("|S_y|", 'FontWeight', 'bold');
+    
+    fig.WindowState = 'maximized';
+    export_dest = "../Report/Figures/exp1_maxlag_" + num2str(maxlag) + ".png";
+    exportgraphics(fig, export_dest);
 end
 
 % NUMERICAL EXPERIMENT 2
 
 yt2 = load('../lab4_num_expt2');
 
-lag = [100 200 2000];
+lag = [100 200 20000];
 
 for i = 4:6
-   fig = figure(i);
-   tiledlayout(1,2);
-   
-	% maxlag = 100;
-   maxlag = lag(i-3);
-	%Autocorrelation of yt
-	Ry  = xcorr(yt2.yt,yt2.yt,maxlag);
-	%tau vector
-	tau_vec = -(maxlag*tstep):tstep:maxlag*tstep;
-	%Abs. PSD corresponding to yt
-	Sy = abs(fftshift(fft(fftshift(Ry))));
-	%define the frequency vector corresponding to tau_vec
-	Ntau = length(tau_vec);
-	%Nyquist sampling rate
+    fig = figure(i);
+    tiledlayout(1,2);
+
+    % maxlag = 100;
+    maxlag = lag(i-3);
+    %Autocorrelation of yt
+    Ry  = xcorr(yt2.yt,yt2.yt,maxlag);
+    %tau vector
+    tau_vec = -(maxlag*tstep):tstep:maxlag*tstep;
+    %Abs. PSD corresponding to yt
+    Sy = abs(fftshift(fft(fftshift(Ry))));
+    %define the frequency vector corresponding to tau_vec
+    Ntau = length(tau_vec);
+    %Nyquist sampling rate
+    fmax = sampling_rate/2; 
 	fmax = sampling_rate/2; 
-	fmin = -fmax;
-	fstep = (fmax-fmin)/Ntau;
-	%Frequency window
-	freq = fmin:fstep:fmax-fstep;
+    fmax = sampling_rate/2; 
+    fmin = -fmax;
+    fstep = (fmax-fmin)/Ntau;
+    %Frequency window
+    freq = fmin:fstep:fmax-fstep;
 
-   nexttile;
-   plot(tau_vec, Ry);
-   title("Autocorrelation R_y");
-   subtitle("maxlag = " + num2str(maxlag));
-   xlabel("\tau (s)", 'FontWeight', 'bold');
-   ylabel("R_y", 'FontWeight', 'bold');
-   ylim([min(Ry) max(Ry)]);
-   yline(0);
+    nexttile;
+    plot(tau_vec, Ry);
+    title("Autocorrelation R_y");
+    subtitle("maxlag = " + num2str(maxlag));
+    xlabel("\tau (s)", 'FontWeight', 'bold');
+    ylabel("R_y", 'FontWeight', 'bold');
+    ylim([min(Ry) max(Ry)]);
+    yline(0);
 
-   nexttile;
-   plot(freq, Sy);
-   title("Absolute Power Spectral Density");
-   subtitle("maxlag = " + num2str(maxlag));
-   xlabel("Frequency (Hz)", 'FontWeight', 'bold');
-   ylabel("|S_y|", 'FontWeight', 'bold');
-   
-   fig.WindowState = 'maximized';
-   export_dest = "../Report/Figures/exp2_maxlag_" + num2str(maxlag) + ".png";
-   exportgraphics(fig, export_dest);
+    nexttile;
+    plot(freq, Sy);
+    title("Absolute Power Spectral Density");
+    subtitle("maxlag = " + num2str(maxlag));
+    xlabel("Frequency (Hz)", 'FontWeight', 'bold');
+    ylabel("|S_y|", 'FontWeight', 'bold');
+
+    f = Sy(length(Sy)/2:end);
+    [m, i] = max(f);
+    freq(i+length(f)-1)
+
+    fig.WindowState = 'maximized';
+    export_dest = "../Report/Figures/exp2_maxlag_" + num2str(maxlag) + ".png";
+    exportgraphics(fig, export_dest);
 end
 
 fig = figure(7);
@@ -121,13 +129,34 @@ fig.WindowState = 'maximized';
 export_dest = "../Report/Figures/exp2_time.png";
 exportgraphics(fig, export_dest);
 
+fig = figure(8);
+
+Nyt = length(yt2.yt);
+%Nyquist sampling rate
+fmax = sampling_rate/2; 
+fmax = sampling_rate/2; 
+fmax = sampling_rate/2; 
+fmin = -fmax;
+fstep = (fmax-fmin)/Nyt;
+%Frequency window
+freq = fmin:fstep:fmax-fstep;
+
+plot(freq, abs(fftshift(fft(fftshift(yt2.yt)))));
+title("Signal yt(n): Magnitude Spectrum");
+xlabel("Frequency (Hz)", 'FontWeight', 'bold');
+ylabel("Magnitude", 'FontWeight', 'bold');
+
+fig.WindowState = 'maximized';
+export_dest = "../Report/Figures/exp2_fft.png";
+exportgraphics(fig, export_dest);
+
 % NUMERICAL EXPERIMENT 3
 
 exp3_vals = load('../lab4_num_expt3');
 exp3_xt = exp3_vals.xt;
 exp3_yt = exp3_vals.yt;
 
-fig = figure(8);
+fig = figure(9);
 t = tiledlayout(1,2);
 
 nexttile;
@@ -162,7 +191,7 @@ fstep = (fmax-fmin)/Ntau;
 %Frequency window
 freq = fmin:fstep:fmax-fstep;
 
-fig = figure(9);
+fig = figure(10);
 plot(tau_vec, R_xy);
 title("Autocorrelation R_{xy}");
 subtitle("maxlag = " + num2str(maxlag));
