@@ -11,8 +11,8 @@ sampling_rate = 1/tstep;
 %Time window =
 tt = tbeg:tstep:tend-tstep;
 
-%load('lab4_num_expt1')
-load('lab4_num_expt2')
+load('lab4_num_expt1')
+%load('lab4_num_expt2')
 %load('lab4_num_expt3')
 
 maxlag = 100;
@@ -30,6 +30,3 @@ fmin = -fmax;
 fstep = (fmax-fmin)/Ntau;
 %Frequency window
 freq = fmin:fstep:fmax-fstep;
-
-hmm = abs(fftshift(fft(fftshift(yt))));
-plot(tt,hmm);
