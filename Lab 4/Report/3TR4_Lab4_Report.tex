@@ -171,16 +171,22 @@ The theoretical results from Equation~\ref{eq:exp2_autocorr} and Equation~\ref{e
 
 % For this section, plot x(t) and y(t) vs time. Explain why your technique works and the straightforward approach of finding the delay by plotting y(t) vs time fails. Provide the plot of cross-correlation between x and y. Can you estimate the delay by the autocorrelation of y(i.e. xcorr(y,y))? Explain.
 
+The signals $x(t)$ and $y(t)$ are plotted in the time domain in Figure~\ref{fig:exp3_time}. From the plot of $y(t)$ in the time domain, it is difficult to determine what the delay is as the signal is almost completely buried in noise. It is difficult to pinpoint the exact location of the peak of the delay due to the noise surrounding it.
+
+An approach to determining the delay would be to plot the cross-correlation between $x$ and $y$, and determining the value of $\tau$ where the autocorrelation function is at its maximum value. The cross-correlation between $x$ and $y$ is plotted in Figure~\ref{fig:exp3_crosscorr}. We can see that the maximum value of the cross-correlation function occurs at $\tau = 0.0424$ seconds. This delay roughly matches the delay found in the time domain plot of $y(t)$ in Figure~\ref{fig:exp3_time}.
+
+The autocorrelation of $y$ (xcorr(y,y)) cannot be used to estimate the delay as the maximum value of the autocorrelation function occurs at $\tau = 0$, which is not equal to the delay in the signal $y$.
+
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\textwidth]{exp3_time}
-	\caption{\label{fig:exp3_time}Time Domain}
+	\caption{\label{fig:exp3_time}Signals $x(t)$ and $y(t)$: Time Domain}
 \end{figure}
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=\textwidth]{exp3_autocorr}
-	\caption{\label{fig:exp3_autocorr}Autocorrelation}
+	\includegraphics[width=\textwidth]{exp3_crosscorr}
+	\caption{\label{fig:exp3_crosscorr}Cross-correlation between $x$ and $y$}
 \end{figure}
 
 \end{document}

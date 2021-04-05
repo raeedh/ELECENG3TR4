@@ -199,7 +199,7 @@ xlabel("\tau (s)", 'FontWeight', 'bold');
 ylabel("R_{xy}", 'FontWeight', 'bold');
 
 fig.WindowState = 'maximized';
-export_dest = "../Report/Figures/exp3_autocorr.png";
+export_dest = "../Report/Figures/exp3_crosscorr.png";
 exportgraphics(fig, export_dest);
 
 [m, i] = max(R_xy);
